@@ -1,0 +1,2588 @@
+GAMS 24.1.2  r40979 Released Jun 16, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/16/24 17:00:46 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1   
+   2  sets
+   3  i round_1 /1*16/
+   4  j round_2 /1*8/
+   5  k round_3 /1*4/
+   6  l final /1*2/
+   7  m winner  /1/
+   8  p game /1*15/
+   9  ;
+  10   
+  11   
+  12  variables
+  13  Z tabe-hadaf
+  14  Nonnegative variables
+  15  X(i)
+  16  Y(j)
+  17  S(k)
+  18  R(l)
+  19  U(m)
+  20  sod(p)
+  21  zarar(p)
+  22   
+  23   
+  24  binary variables
+  25  zb(j)
+  26  tb(k)
+  27  wb(l)
+  28  vb(m)
+  29  sodb(p)
+  30  zararb(p)
+  31   
+  32   
+  33   
+  34  ;
+  35   
+  36  Scalar zero /0/ ;
+  37  Scalar one /1/ ;
+  38  Scalar karshenas /3/ ;
+  39  Scalar max_ticket /10000/ ;
+  40  Scalar bigM /999999999/;
+  41   
+  42  parameters
+  43  teampass_price(i) team pass price
+  44  /
+  45  1 40
+  46  2 20
+  47  3 20
+  48  4 40
+  49  5 50
+  50  6 30
+  51  7 40
+  52  8 30
+  53  9 60
+  54  10 50
+  55  11 80
+  56  12 20
+  57  13 70
+  58  14 20
+  59  15 60
+  60  16 20/
+  61   
+  62   
+  63   
+  64  * 1.2
+  65  individual_price(p) individual price
+  66  /
+  67  1 12
+  68  2 12
+  69  3 12
+  70  4 12
+  71  5 12
+  72  6 12
+  73  7 12
+  74  8 12
+  75  9 24
+  76  10 24
+  77  11 24
+  78  12 24
+  79  13 36
+  80  14 36
+  81  15 48
+  82  /
+  83   
+  84   
+  85   
+  86  * declare index of variables in its equations
+  87   
+  88  sodozarar_index_q1(p) /
+  89           1   1
+  90  /
+  91  sodozarar_index_q2(p) /
+  92           2   1
+  93  /
+  94  sodozarar_index_q3(p) /
+  95           3   1
+  96  /
+  97  sodozarar_index_q4(p) /
+  98           4   1
+  99  /
+ 100  sodozarar_index_q5(p) /
+ 101           5   1
+ 102  /
+ 103  sodozarar_index_q6(p) /
+ 104           6   1
+ 105  /
+ 106  sodozarar_index_q7(p) /
+ 107           7   1
+ 108  /
+ 109  sodozarar_index_q8(p) /
+ 110           8   1
+ 111  /
+ 112  sodozarar_index_q9(p) /
+ 113           9   1
+ 114  /
+ 115  sodozarar_index_q10(p) /
+ 116           10   1
+ 117  /
+ 118  sodozarar_index_q11(p) /
+ 119           11   1
+ 120  /
+ 121  sodozarar_index_q12(p) /
+ 122           12   1
+ 123  /
+ 124  sodozarar_index_q13(p) /
+ 125           13   1
+ 126  /
+ 127  sodozarar_index_q14(p) /
+ 128           14   1
+ 129  /
+ 130  sodozarar_index_q15(p) /
+ 131           15   1
+ 132  /
+ 133   
+ 134   
+ 135  round2_q1_i(i) /
+ 136           1   1
+ 137           2   1
+ 138  /
+ 139  round2_q1_j(j) /
+ 140           1   -1
+ 141  /
+ 142   
+ 143   
+ 144   
+ 145  round2_q2_i(i) /
+ 146           3   1
+ 147           4   1
+ 148  /
+ 149  round2_q2_j(j) /
+ 150           2   -1
+ 151  /
+ 152   
+ 153   
+ 154  round2_q3_i(i) /
+ 155           5   1
+ 156           6   1
+ 157  /
+ 158  round2_q3_j(j) /
+ 159           3   -1
+ 160  /
+ 161   
+ 162  round2_q4_i(i) /
+ 163           7   1
+ 164           8   1
+ 165  /
+ 166  round2_q4_j(j) /
+ 167           4   -1
+ 168  /
+ 169   
+ 170   
+ 171  round2_q5_i(i) /
+ 172           9   1
+ 173           10   1
+ 174  /
+ 175  round2_q5_j(j) /
+ 176           5   -1
+ 177  /
+ 178   
+ 179   
+ 180   
+ 181  round2_q6_i(i) /
+ 182           11   1
+ 183           12   1
+ 184  /
+ 185  round2_q6_j(j) /
+ 186           6   -1
+ 187  /
+ 188   
+ 189   
+ 190  round2_q7_i(i) /
+ 191           13   1
+ 192           14   1
+ 193  /
+ 194  round2_q7_j(j) /
+ 195           7   -1
+ 196  /
+ 197   
+ 198  round2_q8_i(i) /
+ 199           15   1
+ 200           16   1
+ 201  /
+ 202  round2_q8_j(j) /
+ 203           8   -1
+ 204  /
+ 205   
+ 206   
+ 207   
+ 208   
+ 209   
+ 210  round2_x1(i) /
+ 211   
+ 212           1    1
+ 213  /
+ 214   
+ 215  round2_x3(i) /
+ 216   
+ 217           3    1
+ 218  /
+ 219   
+ 220  round2_x5(i) /
+ 221   
+ 222           5    1
+ 223  /
+ 224   
+ 225  round2_x7(i) /
+ 226   
+ 227           7    1
+ 228  /
+ 229  round2_x9(i) /
+ 230   
+ 231           9    1
+ 232  /
+ 233   
+ 234  round2_x11(i) /
+ 235   
+ 236           11    1
+ 237  /
+ 238   
+ 239  round2_x13(i) /
+ 240   
+ 241           13    1
+ 242  /
+ 243   
+ 244  round2_x15(i) /
+ 245   
+ 246           15    1
+ 247  /
+ 248   
+ 249   
+ 250   
+ 251   
+ 252   
+ 253  round3_y1(j) /
+ 254   
+ 255           1    1
+ 256  /
+ 257   
+ 258  round3_y3(j) /
+ 259   
+ 260           3    1
+ 261  /
+ 262   
+ 263  round3_y5(j) /
+ 264   
+ 265           5    1
+ 266  /
+ 267   
+ 268  round3_y7(j) /
+ 269   
+ 270           7    1
+ 271  /
+ 272   
+ 273   
+ 274  final_s1(k) /
+ 275   
+ 276           1    1
+ 277  /
+ 278   
+ 279  final_s3(k) /
+ 280   
+ 281           3    1
+ 282  /
+ 283   
+ 284   
+ 285  winner_R1(l)  /
+ 286   
+ 287           1    1
+ 288  /
+ 289   
+ 290   
+ 291   
+ 292   
+ 293   
+ 294   
+ 295   
+ 296  round3_q1_j(j) /
+ 297           1   1
+ 298           2   1
+ 299  /
+ 300  round3_q1_k(k) /
+ 301           1   -1
+ 302  /
+ 303   
+ 304  round3_q2_j(j) /
+ 305           3   1
+ 306           4   1
+ 307  /
+ 308  round3_q2_k(k) /
+ 309           2   -1
+ 310  /
+ 311   
+ 312  round3_q3_j(j) /
+ 313           5   1
+ 314           6   1
+ 315  /
+ 316  round3_q3_k(k) /
+ 317           3   -1
+ 318  /
+ 319   
+ 320  round3_q4_j(j) /
+ 321           7   1
+ 322           8   1
+ 323  /
+ 324  round3_q4_k(k) /
+ 325           4   -1
+ 326  /
+ 327   
+ 328   
+ 329   
+ 330   
+ 331  final_q1_k(k) /
+ 332           1   1
+ 333           2   1
+ 334  /
+ 335  final_q1_l(l) /
+ 336           1   -1
+ 337  /
+ 338   
+ 339  final_q2_k(k) /
+ 340           3   1
+ 341           4   1
+ 342  /
+ 343  final_q2_l(l) /
+ 344           2   -1
+ 345  /
+ 346   
+ 347   
+ 348  winner_l(l) /
+ 349           1   1
+ 350           2   1
+ 351  /
+ 352  winner_m(m) /
+ 353           1   -1
+ 354  /
+ 355   
+ 356   
+ 357   
+ 358   
+ 359  sodozarar_index_round2_1(j) /
+ 360           1   1
+ 361           2   1
+ 362  /
+ 363  sodozarar_index_round2_2(j) /
+ 364           3   1
+ 365           4   1
+ 366  /
+ 367  sodozarar_index_round2_3(j) /
+ 368           5   1
+ 369           6   1
+ 370  /
+ 371  sodozarar_index_round2_4(j) /
+ 372           7   1
+ 373           8   1
+ 374  /
+ 375   
+ 376   
+ 377   
+ 378  sodozarar_index_round3_1(k) /
+ 379           1   1
+ 380           2   1
+ 381  /
+ 382  sodozarar_index_round3_2(k) /
+ 383           3   1
+ 384           4   1
+ 385  /
+ 386   
+ 387   
+ 388   
+ 389   
+ 390  sodozarar_index_final(l) /
+ 391           1   1
+ 392           2   1
+ 393  /
+ 394   
+ 395  ;
+ 396   
+ 397  equations
+ 398   
+ 399  Objective Objective function of problem
+ 400  round2_q1_L
+ 401  round2_q2_L
+ 402  round2_q3_L
+ 403  round2_q4_L
+ 404  round2_q5_L
+ 405  round2_q6_L
+ 406  round2_q7_L
+ 407  round2_q8_L
+ 408   
+ 409   
+ 410  round3_q1_L
+ 411  round3_q2_L
+ 412  round3_q3_L
+ 413  round3_q4_L
+ 414   
+ 415  final_q1_Le
+ 416  final_q2_Le
+ 417   
+ 418  winner_Le
+ 419   
+ 420   
+ 421   
+ 422   
+ 423  round2_q1_di_L
+ 424  round2_q2_di_L
+ 425  round2_q3_di_L
+ 426  round2_q4_di_L
+ 427  round2_q5_di_L
+ 428  round2_q6_di_L
+ 429  round2_q7_di_L
+ 430  round2_q8_di_L
+ 431   
+ 432   
+ 433  round3_q1_di_L
+ 434  round3_q2_di_L
+ 435  round3_q3_di_L
+ 436  round3_q4_di_L
+ 437   
+ 438  final_q1_di_Le
+ 439  final_q2_di_Le
+ 440   
+ 441  winner_di_Le
+ 442   
+ 443   
+ 444   
+ 445   
+ 446   
+ 447   
+ 448   
+ 449   
+ 450  round2_q1_R
+ 451  round2_q2_R
+ 452  round2_q3_R
+ 453  round2_q4_R
+ 454  round2_q5_R
+ 455  round2_q6_R
+ 456  round2_q7_R
+ 457  round2_q8_R
+ 458   
+ 459   
+ 460  round3_q1_R
+ 461  round3_q2_R
+ 462  round3_q3_R
+ 463  round3_q4_R
+ 464   
+ 465  final_q1_RI
+ 466  final_q2_RI
+ 467   
+ 468  winner_RI
+ 469   
+ 470   
+ 471   
+ 472   
+ 473  round2_q1_di_R
+ 474  round2_q2_di_R
+ 475  round2_q3_di_R
+ 476  round2_q4_di_R
+ 477  round2_q5_di_R
+ 478  round2_q6_di_R
+ 479  round2_q7_di_R
+ 480  round2_q8_di_R
+ 481   
+ 482   
+ 483  round3_q1_di_R
+ 484  round3_q2_di_R
+ 485  round3_q3_di_R
+ 486  round3_q4_di_R
+ 487   
+ 488  final_q1_di_RI
+ 489  final_q2_di_RI
+ 490   
+ 491  winner_di_RI
+ 492   
+ 493   
+ 494   
+ 495   
+ 496   
+ 497   
+ 498   
+ 499  karshenas_L
+ 500   
+ 501   
+ 502  game_1
+ 503  game_2
+ 504  game_3
+ 505  game_4
+ 506  game_5
+ 507  game_6
+ 508  game_7
+ 509  game_8
+ 510   
+ 511   
+ 512   
+ 513  zarar_q1_L
+ 514  zarar_q2_L
+ 515  zarar_q3_L
+ 516  zarar_q4_L
+ 517  zarar_q5_L
+ 518  zarar_q6_L
+ 519  zarar_q7_L
+ 520  zarar_q8_L
+ 521  zarar_q9_L
+ 522  zarar_q10_L
+ 523  zarar_q11_L
+ 524  zarar_q12_L
+ 525  zarar_q13_L
+ 526  zarar_q14_L
+ 527  zarar_q15_L
+ 528   
+ 529   
+ 530  sod_q1_L
+ 531  sod_q2_L
+ 532  sod_q3_L
+ 533  sod_q4_L
+ 534  sod_q5_L
+ 535  sod_q6_L
+ 536  sod_q7_L
+ 537  sod_q8_L
+ 538  sod_q9_L
+ 539  sod_q10_L
+ 540  sod_q11_L
+ 541  sod_q12_L
+ 542  sod_q13_L
+ 543  sod_q14_L
+ 544  sod_q15_L
+ 545   
+ 546   
+ 547  max_sod_q1
+ 548  max_sod_q2
+ 549  max_sod_q3
+ 550  max_sod_q4
+ 551  max_sod_q5
+ 552  max_sod_q6
+ 553  max_sod_q7
+ 554  max_sod_q8
+ 555  max_sod_q9
+ 556  max_sod_q10
+ 557  max_sod_q11
+ 558  max_sod_q12
+ 559  max_sod_q13
+ 560  max_sod_q14
+ 561  max_sod_q15
+ 562   
+ 563   
+ 564  max_zarar_q1
+ 565  max_zarar_q2
+ 566  max_zarar_q3
+ 567  max_zarar_q4
+ 568  max_zarar_q5
+ 569  max_zarar_q6
+ 570  max_zarar_q7
+ 571  max_zarar_q8
+ 572  max_zarar_q9
+ 573  max_zarar_q10
+ 574  max_zarar_q11
+ 575  max_zarar_q12
+ 576  max_zarar_q13
+ 577  max_zarar_q14
+ 578  max_zarar_q15
+ 579   
+ 580   
+ 581  sodORzarar_q1
+ 582  sodORzarar_q2
+ 583  sodORzarar_q3
+ 584  sodORzarar_q4
+ 585  sodORzarar_q5
+ 586  sodORzarar_q6
+ 587  sodORzarar_q7
+ 588  sodORzarar_q8
+ 589  sodORzarar_q9
+ 590  sodORzarar_q10
+ 591  sodORzarar_q11
+ 592  sodORzarar_q12
+ 593  sodORzarar_q13
+ 594  sodORzarar_q14
+ 595  sodORzarar_q15
+ 596  ;
+ 597   
+ 598  Objective..Z=e=sum(i,teampass_price(i) * x(i)) + sum(p,sod(p)*individual_price(p)) -  sum(p,zarar(p)*individual_price(p)*2);
+ 599   
+ 600   
+ 601   
+ 602   
+ 603   
+ 604  karshenas_L..sum(j,zb(j)) + sum(k,tb(k)) + sum(l,wb(l)) + sum(m,vb(m)) =l=karshenas;
+ 605   
+ 606  round2_q1_L..sum(i,round2_q1_i(i)* x(i)) + sum(j,2*round2_q1_j(j)* y(j)) + sum(j,2*round2_q1_j(j)* zb(j)* bigM)=l=zero;
+ 607  round2_q2_L..sum(i,round2_q2_i(i)* x(i)) + sum(j,2*round2_q2_j(j)* y(j)) + sum(j,2*round2_q2_j(j)* zb(j)* bigM)=l=zero;
+ 608  round2_q3_L..sum(i,round2_q3_i(i)* x(i)) + sum(j,2*round2_q3_j(j)* y(j)) + sum(j,2*round2_q3_j(j)* zb(j)* bigM)=l=zero;
+ 609  round2_q4_L..sum(i,round2_q4_i(i)* x(i)) + sum(j,2*round2_q4_j(j)* y(j)) + sum(j,2*round2_q4_j(j)* zb(j)* bigM)=l=zero;
+ 610  round2_q5_L..sum(i,round2_q5_i(i)* x(i)) + sum(j,2*round2_q5_j(j)* y(j)) + sum(j,2*round2_q5_j(j)* zb(j)* bigM)=l=zero;
+ 611  round2_q6_L..sum(i,round2_q6_i(i)* x(i)) + sum(j,2*round2_q6_j(j)* y(j)) + sum(j,2*round2_q6_j(j)* zb(j)* bigM)=l=zero;
+ 612  round2_q7_L..sum(i,round2_q7_i(i)* x(i)) + sum(j,2*round2_q7_j(j)* y(j)) + sum(j,2*round2_q7_j(j)* zb(j)* bigM)=l=zero;
+ 613  round2_q8_L..sum(i,round2_q8_i(i)* x(i)) + sum(j,2*round2_q8_j(j)* y(j)) + sum(j,2*round2_q8_j(j)* zb(j)* bigM)=l=zero;
+ 614   
+ 615   
+ 616  round3_q1_L..sum(j,round3_q1_j(j)* y(j)) + sum(k,2*round3_q1_k(k)* s(k)) + sum(k,2*round3_q1_k(k)* tb(k)* bigM)=l=zero;
+ 617  round3_q2_L..sum(j,round3_q2_j(j)* y(j)) + sum(k,2*round3_q2_k(k)* s(k)) + sum(k,2*round3_q2_k(k)* tb(k)* bigM)=l=zero;
+ 618  round3_q3_L..sum(j,round3_q3_j(j)* y(j)) + sum(k,2*round3_q3_k(k)* s(k)) + sum(k,2*round3_q3_k(k)* tb(k)* bigM)=l=zero;
+ 619  round3_q4_L..sum(j,round3_q4_j(j)* y(j)) + sum(k,2*round3_q4_k(k)* s(k)) + sum(k,2*round3_q4_k(k)* tb(k)* bigM)=l=zero;
+ 620   
+ 621   
+ 622  final_q1_Le..sum(k,final_q1_k(k)* s(k)) + sum(l,2*final_q1_l(l)* R(l)) + sum(l,2*final_q1_l(l)* wb(l)* bigM)=l=zero;
+ 623  final_q2_Le..sum(k,final_q2_k(k)* s(k)) + sum(l,2*final_q2_l(l)* R(l)) + sum(l,2*final_q2_l(l)* wb(l)* bigM)=l=zero;
+ 624   
+ 625  winner_Le..sum(l,winner_l(l)* R(l)) + sum(m,2*winner_m(m)* U(m)) + sum(m,2*winner_m(m)* vb(m)* bigM)=l=zero;
+ 626   
+ 627   
+ 628   
+ 629   
+ 630   
+ 631   
+ 632   
+ 633  round2_q1_di_L..sum(i,round2_x1(i)* x(i)) + sum(j,round2_q1_j(j)* y(j)) + sum(j,round2_q1_j(j)* (1-zb(j))* bigM)=l=zero;
+ 634  round2_q2_di_L..sum(i,round2_x3(i)* x(i)) + sum(j,round2_q2_j(j)* y(j)) + sum(j,round2_q2_j(j)* (1-zb(j))* bigM)=l=zero;
+ 635  round2_q3_di_L..sum(i,round2_x5(i)* x(i)) + sum(j,round2_q3_j(j)* y(j)) + sum(j,round2_q3_j(j)* (1-zb(j))* bigM)=l=zero;
+ 636  round2_q4_di_L..sum(i,round2_x7(i)* x(i)) + sum(j,round2_q4_j(j)* y(j)) + sum(j,round2_q4_j(j)* (1-zb(j))* bigM)=l=zero;
+ 637  round2_q5_di_L..sum(i,round2_x9(i)* x(i)) + sum(j,round2_q5_j(j)* y(j)) + sum(j,round2_q5_j(j)* (1-zb(j))* bigM)=l=zero;
+ 638  round2_q6_di_L..sum(i,round2_x11(i)* x(i)) + sum(j,round2_q6_j(j)* y(j)) + sum(j,round2_q6_j(j)* (1-zb(j))* bigM)=l=zero;
+ 639  round2_q7_di_L..sum(i,round2_x13(i)* x(i)) + sum(j,round2_q7_j(j)* y(j)) + sum(j,round2_q7_j(j)* (1-zb(j))* bigM)=l=zero;
+ 640  round2_q8_di_L..sum(i,round2_x15(i)* x(i)) + sum(j,round2_q8_j(j)* y(j)) + sum(j,round2_q8_j(j)* (1-zb(j))* bigM)=l=zero;
+ 641   
+ 642   
+ 643  round3_q1_di_L..sum(j,round3_y1(j)* y(j)) + sum(k,round3_q1_k(k)* s(k)) + sum(k,round3_q1_k(k)* (1-tb(k))* bigM)=l=zero;
+ 644  round3_q2_di_L..sum(j,round3_y3(j)* y(j)) + sum(k,round3_q2_k(k)* s(k)) + sum(k,round3_q2_k(k)* (1-tb(k))* bigM)=l=zero;
+ 645  round3_q3_di_L..sum(j,round3_y5(j)* y(j)) + sum(k,round3_q3_k(k)* s(k)) + sum(k,round3_q3_k(k)* (1-tb(k))* bigM)=l=zero;
+ 646  round3_q4_di_L..sum(j,round3_y7(j)* y(j)) + sum(k,round3_q4_k(k)* s(k)) + sum(k,round3_q4_k(k)* (1-tb(k))* bigM)=l=zero;
+ 647   
+ 648   
+ 649  final_q1_di_Le..sum(k,final_s1(k)* s(k)) + sum(l,final_q1_l(l)* R(l)) + sum(l,final_q1_l(l)* (1-wb(l))* bigM)=l=zero;
+ 650  final_q2_di_Le..sum(k,final_s3(k)* s(k)) + sum(l,final_q2_l(l)* R(l)) + sum(l,final_q2_l(l)* (1-wb(l))* bigM)=l=zero;
+ 651   
+ 652  winner_di_Le..sum(l,winner_R1(l)* R(l)) + sum(m,winner_m(m)* U(m)) + sum(m,winner_m(m)* (1-vb(m))* bigM)=l=zero;
+ 653   
+ 654   
+ 655   
+ 656   
+ 657   
+ 658   
+ 659   
+ 660   
+ 661   
+ 662   
+ 663   
+ 664  round2_q1_R..sum(i,round2_q1_i(i)* x(i)) + sum(j,2*round2_q1_j(j)* y(j)) - sum(j,2*round2_q1_j(j)* zb(j)* bigM)=g=zero;
+ 665  round2_q2_R..sum(i,round2_q2_i(i)* x(i)) + sum(j,2*round2_q2_j(j)* y(j)) - sum(j,2*round2_q2_j(j)* zb(j)* bigM)=g=zero;
+ 666  round2_q3_R..sum(i,round2_q3_i(i)* x(i)) + sum(j,2*round2_q3_j(j)* y(j)) - sum(j,2*round2_q3_j(j)* zb(j)* bigM)=g=zero;
+ 667  round2_q4_R..sum(i,round2_q4_i(i)* x(i)) + sum(j,2*round2_q4_j(j)* y(j)) - sum(j,2*round2_q4_j(j)* zb(j)* bigM)=g=zero;
+ 668  round2_q5_R..sum(i,round2_q5_i(i)* x(i)) + sum(j,2*round2_q5_j(j)* y(j)) - sum(j,2*round2_q5_j(j)* zb(j)* bigM)=g=zero;
+ 669  round2_q6_R..sum(i,round2_q6_i(i)* x(i)) + sum(j,2*round2_q6_j(j)* y(j)) - sum(j,2*round2_q6_j(j)* zb(j)* bigM)=g=zero;
+ 670  round2_q7_R..sum(i,round2_q7_i(i)* x(i)) + sum(j,2*round2_q7_j(j)* y(j)) - sum(j,2*round2_q7_j(j)* zb(j)* bigM)=g=zero;
+ 671  round2_q8_R..sum(i,round2_q8_i(i)* x(i)) + sum(j,2*round2_q8_j(j)* y(j)) - sum(j,2*round2_q8_j(j)* zb(j)* bigM)=g=zero;
+ 672   
+ 673   
+ 674  round3_q1_R..sum(j,round3_q1_j(j)* y(j)) + sum(k,2*round3_q1_k(k)* s(k)) - sum(k,2*round3_q1_k(k)* tb(k)* bigM)=g=zero;
+ 675  round3_q2_R..sum(j,round3_q2_j(j)* y(j)) + sum(k,2*round3_q2_k(k)* s(k)) - sum(k,2*round3_q2_k(k)* tb(k)* bigM)=g=zero;
+ 676  round3_q3_R..sum(j,round3_q3_j(j)* y(j)) + sum(k,2*round3_q3_k(k)* s(k)) - sum(k,2*round3_q3_k(k)* tb(k)* bigM)=g=zero;
+ 677  round3_q4_R..sum(j,round3_q4_j(j)* y(j)) + sum(k,2*round3_q4_k(k)* s(k)) - sum(k,2*round3_q4_k(k)* tb(k)* bigM)=g=zero;
+ 678   
+ 679   
+ 680  final_q1_RI..sum(k,final_q1_k(k)* s(k)) + sum(l,2*final_q1_l(l)* R(l)) - sum(l,2*final_q1_l(l)* wb(l)* bigM)=g=zero;
+ 681  final_q2_RI..sum(k,final_q2_k(k)* s(k)) + sum(l,2*final_q2_l(l)* R(l)) - sum(l,2*final_q2_l(l)* wb(l)* bigM)=g=zero;
+ 682   
+ 683  winner_RI..sum(l,winner_l(l)* R(l)) + sum(m,2*winner_m(m)* U(m)) - sum(m,2*winner_m(m)* vb(m)* bigM)=g=zero;
+ 684   
+ 685   
+ 686   
+ 687   
+ 688  round2_q1_di_R..sum(i,round2_x1(i)* x(i)) + sum(j,round2_q1_j(j)* y(j)) - sum(j,round2_q1_j(j)* (1-zb(j))* bigM)=g=zero;
+ 689  round2_q2_di_R..sum(i,round2_x3(i)* x(i)) + sum(j,round2_q2_j(j)* y(j)) - sum(j,round2_q2_j(j)* (1-zb(j))* bigM)=g=zero;
+ 690  round2_q3_di_R..sum(i,round2_x5(i)* x(i)) + sum(j,round2_q3_j(j)* y(j)) - sum(j,round2_q3_j(j)* (1-zb(j))* bigM)=g=zero;
+ 691  round2_q4_di_R..sum(i,round2_x7(i)* x(i)) + sum(j,round2_q4_j(j)* y(j)) - sum(j,round2_q4_j(j)* (1-zb(j))* bigM)=g=zero;
+ 692  round2_q5_di_R..sum(i,round2_x9(i)* x(i)) + sum(j,round2_q5_j(j)* y(j)) - sum(j,round2_q5_j(j)* (1-zb(j))* bigM)=g=zero;
+ 693  round2_q6_di_R..sum(i,round2_x11(i)* x(i)) + sum(j,round2_q6_j(j)* y(j)) - sum(j,round2_q6_j(j)* (1-zb(j))* bigM)=g=zero;
+ 694  round2_q7_di_R..sum(i,round2_x13(i)* x(i)) + sum(j,round2_q7_j(j)* y(j)) - sum(j,round2_q7_j(j)* (1-zb(j))* bigM)=g=zero;
+ 695  round2_q8_di_R..sum(i,round2_x15(i)* x(i)) + sum(j,round2_q8_j(j)* y(j)) - sum(j,round2_q8_j(j)* (1-zb(j))* bigM)=g=zero;
+ 696   
+ 697   
+ 698  round3_q1_di_R..sum(j,round3_y1(j)* y(j)) + sum(k,round3_q1_k(k)* s(k)) - sum(k,round3_q1_k(k)* (1-tb(k))* bigM)=g=zero;
+ 699  round3_q2_di_R..sum(j,round3_y3(j)* y(j)) + sum(k,round3_q2_k(k)* s(k)) - sum(k,round3_q2_k(k)* (1-tb(k))* bigM)=g=zero;
+ 700  round3_q3_di_R..sum(j,round3_y5(j)* y(j)) + sum(k,round3_q3_k(k)* s(k)) - sum(k,round3_q3_k(k)* (1-tb(k))* bigM)=g=zero;
+ 701  round3_q4_di_R..sum(j,round3_y7(j)* y(j)) + sum(k,round3_q4_k(k)* s(k)) - sum(k,round3_q4_k(k)* (1-tb(k))* bigM)=g=zero;
+ 702   
+ 703   
+ 704  final_q1_di_RI..sum(k,final_s1(k)* s(k)) + sum(l,final_q1_l(l)* R(l)) - sum(l,final_q1_l(l)* (1-wb(l))* bigM)=g=zero;
+ 705  final_q2_di_RI..sum(k,final_s3(k)* s(k)) + sum(l,final_q2_l(l)* R(l)) - sum(l,final_q2_l(l)* (1-wb(l))* bigM)=g=zero;
+ 706   
+ 707  winner_di_RI..sum(l,winner_R1(l)* R(l)) + sum(m,winner_m(m)* U(m)) - sum(m,winner_m(m)* (1-vb(m))* bigM)=g=zero;
+ 708   
+ 709   
+ 710   
+ 711   
+ 712   
+ 713  game_1..sum(i,round2_q1_i(i)*x(i)) + sum(p,sod(p)*sodozarar_index_q1(p))=l=max_ticket;
+ 714  game_2..sum(i,round2_q2_i(i)*x(i)) + sum(p,sod(p)*sodozarar_index_q2(p))=l=max_ticket;
+ 715  game_3..sum(i,round2_q3_i(i)*x(i)) + sum(p,sod(p)*sodozarar_index_q3(p))=l=max_ticket;
+ 716  game_4..sum(i,round2_q4_i(i)*x(i)) + sum(p,sod(p)*sodozarar_index_q4(p))=l=max_ticket;
+ 717  game_5..sum(i,round2_q5_i(i)*x(i)) + sum(p,sod(p)*sodozarar_index_q5(p))=l=max_ticket;
+ 718  game_6..sum(i,round2_q6_i(i)*x(i)) + sum(p,sod(p)*sodozarar_index_q6(p))=l=max_ticket;
+ 719  game_7..sum(i,round2_q7_i(i)*x(i)) + sum(p,sod(p)*sodozarar_index_q7(p))=l=max_ticket;
+ 720  game_8..sum(i,round2_q8_i(i)*x(i)) + sum(p,sod(p)*sodozarar_index_q8(p))=l=max_ticket;
+ 721   
+ 722   
+ 723  sod_q1_L..sum(i,round2_q1_i(i)* x(i)) + sum(p,sodozarar_index_q1(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q1(p))*bigM=l=max_ticket;
+ 724  sod_q2_L..sum(i,round2_q2_i(i)* x(i)) + sum(p,sodozarar_index_q2(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q2(p))*bigM=l=max_ticket;
+ 725  sod_q3_L..sum(i,round2_q3_i(i)* x(i)) + sum(p,sodozarar_index_q3(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q3(p))*bigM=l=max_ticket;
+ 726  sod_q4_L..sum(i,round2_q4_i(i)* x(i)) + sum(p,sodozarar_index_q4(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q4(p))*bigM=l=max_ticket;
+ 727  sod_q5_L..sum(i,round2_q5_i(i)* x(i)) + sum(p,sodozarar_index_q5(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q5(p))*bigM=l=max_ticket;
+ 728  sod_q6_L..sum(i,round2_q6_i(i)* x(i)) + sum(p,sodozarar_index_q6(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q6(p))*bigM=l=max_ticket;
+ 729  sod_q7_L..sum(i,round2_q7_i(i)* x(i)) + sum(p,sodozarar_index_q7(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q7(p))*bigM=l=max_ticket;
+ 730  sod_q8_L..sum(i,round2_q8_i(i)* x(i)) + sum(p,sodozarar_index_q8(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q8(p))*bigM=l=max_ticket;
+ 731  sod_q9_L..sum(j,sodozarar_index_round2_1(j)* y(j)) + sum(p,sodozarar_index_q9(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q9(p))*bigM=l=max_ticket;
+ 732  sod_q10_L..sum(j,sodozarar_index_round2_2(j)* y(j)) + sum(p,sodozarar_index_q10(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q10(p))*bigM=l=max_ticket;
+ 733  sod_q11_L..sum(j,sodozarar_index_round2_3(j)* y(j)) + sum(p,sodozarar_index_q11(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q11(p))*bigM=l=max_ticket;
+ 734  sod_q12_L..sum(j,sodozarar_index_round2_4(j)* y(j)) + sum(p,sodozarar_index_q12(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q12(p))*bigM=l=max_ticket;
+ 735  sod_q13_L..sum(k,sodozarar_index_round3_1(k)* S(k)) + sum(p,sodozarar_index_q13(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q13(p))*bigM=l=max_ticket;
+ 736  sod_q14_L..sum(k,sodozarar_index_round3_2(k)* S(k)) + sum(p,sodozarar_index_q14(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q14(p))*bigM=l=max_ticket;
+ 737  sod_q15_L..sum(l,sodozarar_index_final(l)* R(l)) + sum(p,sodozarar_index_q15(p)*sod(p))- sum(p,zararb(p)*sodozarar_index_q15(p))*bigM=l=max_ticket;
+ 738   
+ 739   
+ 740   
+ 741  zarar_q1_L..sum(i,round2_q1_i(i)* x(i)) + sum(p,-sodozarar_index_q1(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q1(p))*bigM=l=max_ticket;
+ 742  zarar_q2_L..sum(i,round2_q2_i(i)* x(i)) + sum(p,-sodozarar_index_q2(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q2(p))*bigM=l=max_ticket;
+ 743  zarar_q3_L..sum(i,round2_q3_i(i)* x(i)) + sum(p,-sodozarar_index_q3(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q3(p))*bigM=l=max_ticket;
+ 744  zarar_q4_L..sum(i,round2_q4_i(i)* x(i)) + sum(p,-sodozarar_index_q4(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q4(p))*bigM=l=max_ticket;
+ 745  zarar_q5_L..sum(i,round2_q5_i(i)* x(i)) + sum(p,-sodozarar_index_q5(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q5(p))*bigM=l=max_ticket;
+ 746  zarar_q6_L..sum(i,round2_q6_i(i)* x(i)) + sum(p,-sodozarar_index_q6(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q6(p))*bigM=l=max_ticket;
+ 747  zarar_q7_L..sum(i,round2_q7_i(i)* x(i)) + sum(p,-sodozarar_index_q7(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q7(p))*bigM=l=max_ticket;
+ 748  zarar_q8_L..sum(i,round2_q8_i(i)* x(i)) + sum(p,-sodozarar_index_q8(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q8(p))*bigM=l=max_ticket;
+ 749  zarar_q9_L..sum(j,sodozarar_index_round2_1(j)* y(j)) + sum(p,-sodozarar_index_q9(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q9(p))*bigM=l=max_ticket;
+ 750  zarar_q10_L..sum(j,sodozarar_index_round2_2(j)* y(j)) + sum(p,-sodozarar_index_q10(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q10(p))*bigM=l=max_ticket;
+ 751  zarar_q11_L..sum(j,sodozarar_index_round2_3(j)* y(j)) + sum(p,-sodozarar_index_q11(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q11(p))*bigM=l=max_ticket;
+ 752  zarar_q12_L..sum(j,sodozarar_index_round2_4(j)* y(j)) + sum(p,-sodozarar_index_q12(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q12(p))*bigM=l=max_ticket;
+ 753  zarar_q13_L..sum(k,sodozarar_index_round3_1(k)* S(k)) + sum(p,-sodozarar_index_q13(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q13(p))*bigM=l=max_ticket;
+ 754  zarar_q14_L..sum(k,sodozarar_index_round3_2(k)* S(k)) + sum(p,-sodozarar_index_q14(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q14(p))*bigM=l=max_ticket;
+ 755  zarar_q15_L..sum(l,sodozarar_index_final(l)* R(l)) + sum(p,-sodozarar_index_q15(p)*zarar(p))+ sum(p,-sodb(p)*sodozarar_index_q15(p))*bigM=l=max_ticket;
+ 756   
+ 757   
+ 758   
+ 759   
+ 760  max_sod_q1..sum(p,sod(p)*sodozarar_index_q1(p)) - sum(p,sodb(p)*sodozarar_index_q1(p))*max_ticket=l=zero;
+ 761  max_sod_q2..sum(p,sod(p)*sodozarar_index_q2(p)) - sum(p,sodb(p)*sodozarar_index_q2(p))*max_ticket=l=zero;
+ 762  max_sod_q3..sum(p,sod(p)*sodozarar_index_q3(p)) - sum(p,sodb(p)*sodozarar_index_q3(p))*max_ticket=l=zero;
+ 763  max_sod_q4..sum(p,sod(p)*sodozarar_index_q4(p)) - sum(p,sodb(p)*sodozarar_index_q4(p))*max_ticket=l=zero;
+ 764  max_sod_q5..sum(p,sod(p)*sodozarar_index_q5(p)) - sum(p,sodb(p)*sodozarar_index_q5(p))*max_ticket=l=zero;
+ 765  max_sod_q6..sum(p,sod(p)*sodozarar_index_q6(p)) - sum(p,sodb(p)*sodozarar_index_q6(p))*max_ticket=l=zero;
+ 766  max_sod_q7..sum(p,sod(p)*sodozarar_index_q7(p)) - sum(p,sodb(p)*sodozarar_index_q7(p))*max_ticket=l=zero;
+ 767  max_sod_q8..sum(p,sod(p)*sodozarar_index_q8(p)) - sum(p,sodb(p)*sodozarar_index_q8(p))*max_ticket=l=zero;
+ 768  max_sod_q9..sum(p,sod(p)*sodozarar_index_q9(p)) - sum(p,sodb(p)*sodozarar_index_q9(p))*max_ticket=l=zero;
+ 769  max_sod_q10..sum(p,sod(p)*sodozarar_index_q10(p)) - sum(p,sodb(p)*sodozarar_index_q10(p))*max_ticket=l=zero;
+ 770  max_sod_q11..sum(p,sod(p)*sodozarar_index_q11(p)) - sum(p,sodb(p)*sodozarar_index_q11(p))*max_ticket=l=zero;
+ 771  max_sod_q12..sum(p,sod(p)*sodozarar_index_q12(p)) - sum(p,sodb(p)*sodozarar_index_q12(p))*max_ticket=l=zero;
+ 772  max_sod_q13..sum(p,sod(p)*sodozarar_index_q13(p)) - sum(p,sodb(p)*sodozarar_index_q13(p))*max_ticket=l=zero;
+ 773  max_sod_q14..sum(p,sod(p)*sodozarar_index_q14(p)) - sum(p,sodb(p)*sodozarar_index_q14(p))*max_ticket=l=zero;
+ 774  max_sod_q15..sum(p,sod(p)*sodozarar_index_q15(p)) - sum(p,sodb(p)*sodozarar_index_q15(p))*max_ticket=l=zero;
+ 775   
+ 776   
+ 777   
+ 778  max_zarar_q1..sum(p,zarar(p)*sodozarar_index_q1(p)) - sum(p,zararb(p)*sodozarar_index_q1(p))*max_ticket=l=zero;
+ 779  max_zarar_q2..sum(p,zarar(p)*sodozarar_index_q2(p)) - sum(p,zararb(p)*sodozarar_index_q2(p))*max_ticket=l=zero;
+ 780  max_zarar_q3..sum(p,zarar(p)*sodozarar_index_q3(p)) - sum(p,zararb(p)*sodozarar_index_q3(p))*max_ticket=l=zero;
+ 781  max_zarar_q4..sum(p,zarar(p)*sodozarar_index_q4(p)) - sum(p,zararb(p)*sodozarar_index_q4(p))*max_ticket=l=zero;
+ 782  max_zarar_q5..sum(p,zarar(p)*sodozarar_index_q5(p)) - sum(p,zararb(p)*sodozarar_index_q5(p))*max_ticket=l=zero;
+ 783  max_zarar_q6..sum(p,zarar(p)*sodozarar_index_q6(p)) - sum(p,zararb(p)*sodozarar_index_q6(p))*max_ticket=l=zero;
+ 784  max_zarar_q7..sum(p,zarar(p)*sodozarar_index_q7(p)) - sum(p,zararb(p)*sodozarar_index_q7(p))*max_ticket=l=zero;
+ 785  max_zarar_q8..sum(p,zarar(p)*sodozarar_index_q8(p)) - sum(p,zararb(p)*sodozarar_index_q8(p))*max_ticket=l=zero;
+ 786  max_zarar_q9..sum(p,zarar(p)*sodozarar_index_q9(p)) - sum(p,zararb(p)*sodozarar_index_q9(p))*max_ticket=l=zero;
+ 787  max_zarar_q10..sum(p,zarar(p)*sodozarar_index_q10(p)) - sum(p,zararb(p)*sodozarar_index_q10(p))*max_ticket=l=zero;
+ 788  max_zarar_q11..sum(p,zarar(p)*sodozarar_index_q11(p)) - sum(p,zararb(p)*sodozarar_index_q11(p))*max_ticket=l=zero;
+ 789  max_zarar_q12..sum(p,zarar(p)*sodozarar_index_q12(p)) - sum(p,zararb(p)*sodozarar_index_q12(p))*max_ticket=l=zero;
+ 790  max_zarar_q13..sum(p,zarar(p)*sodozarar_index_q13(p)) - sum(p,zararb(p)*sodozarar_index_q13(p))*max_ticket=l=zero;
+ 791  max_zarar_q14..sum(p,zarar(p)*sodozarar_index_q14(p)) - sum(p,zararb(p)*sodozarar_index_q14(p))*max_ticket=l=zero;
+ 792  max_zarar_q15..sum(p,zarar(p)*sodozarar_index_q15(p)) - sum(p,zararb(p)*sodozarar_index_q15(p))*max_ticket=l=zero;
+ 793   
+ 794   
+ 795   
+ 796   
+ 797  sodORzarar_q1..sum(p,sodb(p)*sodozarar_index_q1(p))+sum(p,zararb(p)*sodozarar_index_q1(p))=e=one;
+ 798  sodORzarar_q2..sum(p,sodb(p)*sodozarar_index_q2(p))+sum(p,zararb(p)*sodozarar_index_q2(p))=e=one;
+ 799  sodORzarar_q3..sum(p,sodb(p)*sodozarar_index_q3(p))+sum(p,zararb(p)*sodozarar_index_q3(p))=e=one;
+ 800  sodORzarar_q4..sum(p,sodb(p)*sodozarar_index_q4(p))+sum(p,zararb(p)*sodozarar_index_q4(p))=e=one;
+ 801  sodORzarar_q5..sum(p,sodb(p)*sodozarar_index_q5(p))+sum(p,zararb(p)*sodozarar_index_q5(p))=e=one;
+ 802  sodORzarar_q6..sum(p,sodb(p)*sodozarar_index_q6(p))+sum(p,zararb(p)*sodozarar_index_q6(p))=e=one;
+ 803  sodORzarar_q7..sum(p,sodb(p)*sodozarar_index_q7(p))+sum(p,zararb(p)*sodozarar_index_q7(p))=e=one;
+ 804  sodORzarar_q8..sum(p,sodb(p)*sodozarar_index_q8(p))+sum(p,zararb(p)*sodozarar_index_q8(p))=e=one;
+ 805  sodORzarar_q9..sum(p,sodb(p)*sodozarar_index_q9(p))+sum(p,zararb(p)*sodozarar_index_q9(p))=e=one;
+ 806  sodORzarar_q10..sum(p,sodb(p)*sodozarar_index_q10(p))+sum(p,zararb(p)*sodozarar_index_q10(p))=e=one;
+ 807  sodORzarar_q11..sum(p,sodb(p)*sodozarar_index_q11(p))+sum(p,zararb(p)*sodozarar_index_q11(p))=e=one;
+ 808  sodORzarar_q12..sum(p,sodb(p)*sodozarar_index_q12(p))+sum(p,zararb(p)*sodozarar_index_q12(p))=e=one;
+ 809  sodORzarar_q13..sum(p,sodb(p)*sodozarar_index_q13(p))+sum(p,zararb(p)*sodozarar_index_q13(p))=e=one;
+ 810  sodORzarar_q14..sum(p,sodb(p)*sodozarar_index_q14(p))+sum(p,zararb(p)*sodozarar_index_q14(p))=e=one;
+ 811  sodORzarar_q15..sum(p,sodb(p)*sodozarar_index_q15(p))+sum(p,zararb(p)*sodozarar_index_q15(p))=e=one;
+ 812   
+ 813   
+ 814  Model games  / all /;
+ 815   
+ 820  games.optfile = 1;
+ 821   
+ 822  Solve  games using MIP maximizing Z;
+ 823  Option MIP = Cplex;
+ 824   
+ 825  Display x.l,x.m;
+ 826   
+ 827   
+ 828   
+ 829   
+ 830   
+ 831   
+ 832   
+ 833   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  24.1.2 r40979 WEX-WEI
+GAMS 24.1.2  r40979 Released Jun 16, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/16/24 17:00:46 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE games Using MIP From line 822
+
+
+---- Objective  =E=  Objective function of problem
+
+Objective..  Z - 40*X(1) - 20*X(2) - 20*X(3) - 40*X(4) - 50*X(5) - 30*X(6) - 40*X(7) - 30*X(8) - 60*X(9) - 50*X(10) - 80*X(11) - 20*X(12) - 70*X(13) - 20*X(14) - 60*X(15) - 20*X(16) - 12*sod(1) - 12*sod(2) - 12*sod(3) - 12*sod(4) - 12*sod(5) - 12*sod(6)
+     
+      - 12*sod(7) - 12*sod(8) - 24*sod(9) - 24*sod(10) - 24*sod(11) - 24*sod(12) - 36*sod(13) - 36*sod(14) - 48*sod(15) + 24*zarar(1) + 24*zarar(2) + 24*zarar(3) + 24*zarar(4) + 24*zarar(5) + 24*zarar(6) + 24*zarar(7) + 24*zarar(8) + 48*zarar(9)
+     
+      + 48*zarar(10) + 48*zarar(11) + 48*zarar(12) + 72*zarar(13) + 72*zarar(14) + 96*zarar(15) =E= 0 ; (LHS = 0)
+     
+
+---- round2_q1_L  =L=  
+
+round2_q1_L..  X(1) + X(2) - 2*Y(1) - 1999999998*zb(1) =L= 0 ; (LHS = 0)
+     
+
+---- round2_q2_L  =L=  
+
+round2_q2_L..  X(3) + X(4) - 2*Y(2) - 1999999998*zb(2) =L= 0 ; (LHS = 0)
+     
+
+---- round2_q3_L  =L=  
+
+round2_q3_L..  X(5) + X(6) - 2*Y(3) - 1999999998*zb(3) =L= 0 ; (LHS = 0)
+     
+
+---- round2_q4_L  =L=  
+
+round2_q4_L..  X(7) + X(8) - 2*Y(4) - 1999999998*zb(4) =L= 0 ; (LHS = 0)
+     
+
+---- round2_q5_L  =L=  
+
+round2_q5_L..  X(9) + X(10) - 2*Y(5) - 1999999998*zb(5) =L= 0 ; (LHS = 0)
+     
+
+---- round2_q6_L  =L=  
+
+round2_q6_L..  X(11) + X(12) - 2*Y(6) - 1999999998*zb(6) =L= 0 ; (LHS = 0)
+     
+
+---- round2_q7_L  =L=  
+
+round2_q7_L..  X(13) + X(14) - 2*Y(7) - 1999999998*zb(7) =L= 0 ; (LHS = 0)
+     
+
+---- round2_q8_L  =L=  
+
+round2_q8_L..  X(15) + X(16) - 2*Y(8) - 1999999998*zb(8) =L= 0 ; (LHS = 0)
+     
+
+---- round3_q1_L  =L=  
+
+round3_q1_L..  Y(1) + Y(2) - 2*S(1) - 1999999998*tb(1) =L= 0 ; (LHS = 0)
+     
+
+---- round3_q2_L  =L=  
+
+round3_q2_L..  Y(3) + Y(4) - 2*S(2) - 1999999998*tb(2) =L= 0 ; (LHS = 0)
+     
+
+---- round3_q3_L  =L=  
+
+round3_q3_L..  Y(5) + Y(6) - 2*S(3) - 1999999998*tb(3) =L= 0 ; (LHS = 0)
+     
+
+---- round3_q4_L  =L=  
+
+round3_q4_L..  Y(7) + Y(8) - 2*S(4) - 1999999998*tb(4) =L= 0 ; (LHS = 0)
+     
+
+---- final_q1_Le  =L=  
+
+final_q1_Le..  S(1) + S(2) - 2*R(1) - 1999999998*wb(1) =L= 0 ; (LHS = 0)
+     
+
+---- final_q2_Le  =L=  
+
+final_q2_Le..  S(3) + S(4) - 2*R(2) - 1999999998*wb(2) =L= 0 ; (LHS = 0)
+     
+
+---- winner_Le  =L=  
+
+winner_Le..  R(1) + R(2) - 2*U(1) - 1999999998*vb(1) =L= 0 ; (LHS = 0)
+     
+
+---- round2_q1_di_L  =L=  
+
+round2_q1_di_L..  X(1) - Y(1) + 999999999*zb(1) =L= 999999999 ; (LHS = 0)
+     
+
+---- round2_q2_di_L  =L=  
+
+round2_q2_di_L..  X(3) - Y(2) + 999999999*zb(2) =L= 999999999 ; (LHS = 0)
+     
+
+---- round2_q3_di_L  =L=  
+
+round2_q3_di_L..  X(5) - Y(3) + 999999999*zb(3) =L= 999999999 ; (LHS = 0)
+     
+
+---- round2_q4_di_L  =L=  
+
+round2_q4_di_L..  X(7) - Y(4) + 999999999*zb(4) =L= 999999999 ; (LHS = 0)
+     
+
+---- round2_q5_di_L  =L=  
+
+round2_q5_di_L..  X(9) - Y(5) + 999999999*zb(5) =L= 999999999 ; (LHS = 0)
+     
+
+---- round2_q6_di_L  =L=  
+
+round2_q6_di_L..  X(11) - Y(6) + 999999999*zb(6) =L= 999999999 ; (LHS = 0)
+     
+
+---- round2_q7_di_L  =L=  
+
+round2_q7_di_L..  X(13) - Y(7) + 999999999*zb(7) =L= 999999999 ; (LHS = 0)
+     
+
+---- round2_q8_di_L  =L=  
+
+round2_q8_di_L..  X(15) - Y(8) + 999999999*zb(8) =L= 999999999 ; (LHS = 0)
+     
+
+---- round3_q1_di_L  =L=  
+
+round3_q1_di_L..  Y(1) - S(1) + 999999999*tb(1) =L= 999999999 ; (LHS = 0)
+     
+
+---- round3_q2_di_L  =L=  
+
+round3_q2_di_L..  Y(3) - S(2) + 999999999*tb(2) =L= 999999999 ; (LHS = 0)
+     
+
+---- round3_q3_di_L  =L=  
+
+round3_q3_di_L..  Y(5) - S(3) + 999999999*tb(3) =L= 999999999 ; (LHS = 0)
+     
+
+---- round3_q4_di_L  =L=  
+
+round3_q4_di_L..  Y(7) - S(4) + 999999999*tb(4) =L= 999999999 ; (LHS = 0)
+     
+
+---- final_q1_di_Le  =L=  
+
+final_q1_di_Le..  S(1) - R(1) + 999999999*wb(1) =L= 999999999 ; (LHS = 0)
+     
+
+---- final_q2_di_Le  =L=  
+
+final_q2_di_Le..  S(3) - R(2) + 999999999*wb(2) =L= 999999999 ; (LHS = 0)
+     
+
+---- winner_di_Le  =L=  
+
+winner_di_Le..  R(1) - U(1) + 999999999*vb(1) =L= 999999999 ; (LHS = 0)
+     
+
+---- round2_q1_R  =G=  
+
+round2_q1_R..  X(1) + X(2) - 2*Y(1) + 1999999998*zb(1) =G= 0 ; (LHS = 0)
+     
+
+---- round2_q2_R  =G=  
+
+round2_q2_R..  X(3) + X(4) - 2*Y(2) + 1999999998*zb(2) =G= 0 ; (LHS = 0)
+     
+
+---- round2_q3_R  =G=  
+
+round2_q3_R..  X(5) + X(6) - 2*Y(3) + 1999999998*zb(3) =G= 0 ; (LHS = 0)
+     
+
+---- round2_q4_R  =G=  
+
+round2_q4_R..  X(7) + X(8) - 2*Y(4) + 1999999998*zb(4) =G= 0 ; (LHS = 0)
+     
+
+---- round2_q5_R  =G=  
+
+round2_q5_R..  X(9) + X(10) - 2*Y(5) + 1999999998*zb(5) =G= 0 ; (LHS = 0)
+     
+
+---- round2_q6_R  =G=  
+
+round2_q6_R..  X(11) + X(12) - 2*Y(6) + 1999999998*zb(6) =G= 0 ; (LHS = 0)
+     
+
+---- round2_q7_R  =G=  
+
+round2_q7_R..  X(13) + X(14) - 2*Y(7) + 1999999998*zb(7) =G= 0 ; (LHS = 0)
+     
+
+---- round2_q8_R  =G=  
+
+round2_q8_R..  X(15) + X(16) - 2*Y(8) + 1999999998*zb(8) =G= 0 ; (LHS = 0)
+     
+
+---- round3_q1_R  =G=  
+
+round3_q1_R..  Y(1) + Y(2) - 2*S(1) + 1999999998*tb(1) =G= 0 ; (LHS = 0)
+     
+
+---- round3_q2_R  =G=  
+
+round3_q2_R..  Y(3) + Y(4) - 2*S(2) + 1999999998*tb(2) =G= 0 ; (LHS = 0)
+     
+
+---- round3_q3_R  =G=  
+
+round3_q3_R..  Y(5) + Y(6) - 2*S(3) + 1999999998*tb(3) =G= 0 ; (LHS = 0)
+     
+
+---- round3_q4_R  =G=  
+
+round3_q4_R..  Y(7) + Y(8) - 2*S(4) + 1999999998*tb(4) =G= 0 ; (LHS = 0)
+     
+
+---- final_q1_RI  =G=  
+
+final_q1_RI..  S(1) + S(2) - 2*R(1) + 1999999998*wb(1) =G= 0 ; (LHS = 0)
+     
+
+---- final_q2_RI  =G=  
+
+final_q2_RI..  S(3) + S(4) - 2*R(2) + 1999999998*wb(2) =G= 0 ; (LHS = 0)
+     
+
+---- winner_RI  =G=  
+
+winner_RI..  R(1) + R(2) - 2*U(1) + 1999999998*vb(1) =G= 0 ; (LHS = 0)
+     
+
+---- round2_q1_di_R  =G=  
+
+round2_q1_di_R..  X(1) - Y(1) - 999999999*zb(1) =G= -999999999 ; (LHS = 0)
+     
+
+---- round2_q2_di_R  =G=  
+
+round2_q2_di_R..  X(3) - Y(2) - 999999999*zb(2) =G= -999999999 ; (LHS = 0)
+     
+
+---- round2_q3_di_R  =G=  
+
+round2_q3_di_R..  X(5) - Y(3) - 999999999*zb(3) =G= -999999999 ; (LHS = 0)
+     
+
+---- round2_q4_di_R  =G=  
+
+round2_q4_di_R..  X(7) - Y(4) - 999999999*zb(4) =G= -999999999 ; (LHS = 0)
+     
+
+---- round2_q5_di_R  =G=  
+
+round2_q5_di_R..  X(9) - Y(5) - 999999999*zb(5) =G= -999999999 ; (LHS = 0)
+     
+
+---- round2_q6_di_R  =G=  
+
+round2_q6_di_R..  X(11) - Y(6) - 999999999*zb(6) =G= -999999999 ; (LHS = 0)
+     
+
+---- round2_q7_di_R  =G=  
+
+round2_q7_di_R..  X(13) - Y(7) - 999999999*zb(7) =G= -999999999 ; (LHS = 0)
+     
+
+---- round2_q8_di_R  =G=  
+
+round2_q8_di_R..  X(15) - Y(8) - 999999999*zb(8) =G= -999999999 ; (LHS = 0)
+     
+
+---- round3_q1_di_R  =G=  
+
+round3_q1_di_R..  Y(1) - S(1) - 999999999*tb(1) =G= -999999999 ; (LHS = 0)
+     
+
+---- round3_q2_di_R  =G=  
+
+round3_q2_di_R..  Y(3) - S(2) - 999999999*tb(2) =G= -999999999 ; (LHS = 0)
+     
+
+---- round3_q3_di_R  =G=  
+
+round3_q3_di_R..  Y(5) - S(3) - 999999999*tb(3) =G= -999999999 ; (LHS = 0)
+     
+
+---- round3_q4_di_R  =G=  
+
+round3_q4_di_R..  Y(7) - S(4) - 999999999*tb(4) =G= -999999999 ; (LHS = 0)
+     
+
+---- final_q1_di_RI  =G=  
+
+final_q1_di_RI..  S(1) - R(1) - 999999999*wb(1) =G= -999999999 ; (LHS = 0)
+     
+
+---- final_q2_di_RI  =G=  
+
+final_q2_di_RI..  S(3) - R(2) - 999999999*wb(2) =G= -999999999 ; (LHS = 0)
+     
+
+---- winner_di_RI  =G=  
+
+winner_di_RI..  R(1) - U(1) - 999999999*vb(1) =G= -999999999 ; (LHS = 0)
+     
+
+---- karshenas_L  =L=  
+
+karshenas_L..  zb(1) + zb(2) + zb(3) + zb(4) + zb(5) + zb(6) + zb(7) + zb(8) + tb(1) + tb(2) + tb(3) + tb(4) + wb(1) + wb(2) + vb(1) =L= 3 ; (LHS = 0)
+     
+
+---- game_1  =L=  
+
+game_1..  X(1) + X(2) + sod(1) =L= 10000 ; (LHS = 0)
+     
+
+---- game_2  =L=  
+
+game_2..  X(3) + X(4) + sod(2) =L= 10000 ; (LHS = 0)
+     
+
+---- game_3  =L=  
+
+game_3..  X(5) + X(6) + sod(3) =L= 10000 ; (LHS = 0)
+     
+
+---- game_4  =L=  
+
+game_4..  X(7) + X(8) + sod(4) =L= 10000 ; (LHS = 0)
+     
+
+---- game_5  =L=  
+
+game_5..  X(9) + X(10) + sod(5) =L= 10000 ; (LHS = 0)
+     
+
+---- game_6  =L=  
+
+game_6..  X(11) + X(12) + sod(6) =L= 10000 ; (LHS = 0)
+     
+
+---- game_7  =L=  
+
+game_7..  X(13) + X(14) + sod(7) =L= 10000 ; (LHS = 0)
+     
+
+---- game_8  =L=  
+
+game_8..  X(15) + X(16) + sod(8) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q1_L  =L=  
+
+zarar_q1_L..  X(1) + X(2) - zarar(1) - 999999999*sodb(1) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q2_L  =L=  
+
+zarar_q2_L..  X(3) + X(4) - zarar(2) - 999999999*sodb(2) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q3_L  =L=  
+
+zarar_q3_L..  X(5) + X(6) - zarar(3) - 999999999*sodb(3) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q4_L  =L=  
+
+zarar_q4_L..  X(7) + X(8) - zarar(4) - 999999999*sodb(4) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q5_L  =L=  
+
+zarar_q5_L..  X(9) + X(10) - zarar(5) - 999999999*sodb(5) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q6_L  =L=  
+
+zarar_q6_L..  X(11) + X(12) - zarar(6) - 999999999*sodb(6) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q7_L  =L=  
+
+zarar_q7_L..  X(13) + X(14) - zarar(7) - 999999999*sodb(7) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q8_L  =L=  
+
+zarar_q8_L..  X(15) + X(16) - zarar(8) - 999999999*sodb(8) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q9_L  =L=  
+
+zarar_q9_L..  Y(1) + Y(2) - zarar(9) - 999999999*sodb(9) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q10_L  =L=  
+
+zarar_q10_L..  Y(3) + Y(4) - zarar(10) - 999999999*sodb(10) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q11_L  =L=  
+
+zarar_q11_L..  Y(5) + Y(6) - zarar(11) - 999999999*sodb(11) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q12_L  =L=  
+
+zarar_q12_L..  Y(7) + Y(8) - zarar(12) - 999999999*sodb(12) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q13_L  =L=  
+
+zarar_q13_L..  S(1) + S(2) - zarar(13) - 999999999*sodb(13) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q14_L  =L=  
+
+zarar_q14_L..  S(3) + S(4) - zarar(14) - 999999999*sodb(14) =L= 10000 ; (LHS = 0)
+     
+
+---- zarar_q15_L  =L=  
+
+zarar_q15_L..  R(1) + R(2) - zarar(15) - 999999999*sodb(15) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q1_L  =L=  
+
+sod_q1_L..  X(1) + X(2) + sod(1) - 999999999*zararb(1) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q2_L  =L=  
+
+sod_q2_L..  X(3) + X(4) + sod(2) - 999999999*zararb(2) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q3_L  =L=  
+
+sod_q3_L..  X(5) + X(6) + sod(3) - 999999999*zararb(3) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q4_L  =L=  
+
+sod_q4_L..  X(7) + X(8) + sod(4) - 999999999*zararb(4) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q5_L  =L=  
+
+sod_q5_L..  X(9) + X(10) + sod(5) - 999999999*zararb(5) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q6_L  =L=  
+
+sod_q6_L..  X(11) + X(12) + sod(6) - 999999999*zararb(6) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q7_L  =L=  
+
+sod_q7_L..  X(13) + X(14) + sod(7) - 999999999*zararb(7) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q8_L  =L=  
+
+sod_q8_L..  X(15) + X(16) + sod(8) - 999999999*zararb(8) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q9_L  =L=  
+
+sod_q9_L..  Y(1) + Y(2) + sod(9) - 999999999*zararb(9) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q10_L  =L=  
+
+sod_q10_L..  Y(3) + Y(4) + sod(10) - 999999999*zararb(10) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q11_L  =L=  
+
+sod_q11_L..  Y(5) + Y(6) + sod(11) - 999999999*zararb(11) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q12_L  =L=  
+
+sod_q12_L..  Y(7) + Y(8) + sod(12) - 999999999*zararb(12) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q13_L  =L=  
+
+sod_q13_L..  S(1) + S(2) + sod(13) - 999999999*zararb(13) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q14_L  =L=  
+
+sod_q14_L..  S(3) + S(4) + sod(14) - 999999999*zararb(14) =L= 10000 ; (LHS = 0)
+     
+
+---- sod_q15_L  =L=  
+
+sod_q15_L..  R(1) + R(2) + sod(15) - 999999999*zararb(15) =L= 10000 ; (LHS = 0)
+     
+
+---- max_sod_q1  =L=  
+
+max_sod_q1..  sod(1) - 10000*sodb(1) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q2  =L=  
+
+max_sod_q2..  sod(2) - 10000*sodb(2) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q3  =L=  
+
+max_sod_q3..  sod(3) - 10000*sodb(3) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q4  =L=  
+
+max_sod_q4..  sod(4) - 10000*sodb(4) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q5  =L=  
+
+max_sod_q5..  sod(5) - 10000*sodb(5) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q6  =L=  
+
+max_sod_q6..  sod(6) - 10000*sodb(6) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q7  =L=  
+
+max_sod_q7..  sod(7) - 10000*sodb(7) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q8  =L=  
+
+max_sod_q8..  sod(8) - 10000*sodb(8) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q9  =L=  
+
+max_sod_q9..  sod(9) - 10000*sodb(9) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q10  =L=  
+
+max_sod_q10..  sod(10) - 10000*sodb(10) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q11  =L=  
+
+max_sod_q11..  sod(11) - 10000*sodb(11) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q12  =L=  
+
+max_sod_q12..  sod(12) - 10000*sodb(12) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q13  =L=  
+
+max_sod_q13..  sod(13) - 10000*sodb(13) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q14  =L=  
+
+max_sod_q14..  sod(14) - 10000*sodb(14) =L= 0 ; (LHS = 0)
+     
+
+---- max_sod_q15  =L=  
+
+max_sod_q15..  sod(15) - 10000*sodb(15) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q1  =L=  
+
+max_zarar_q1..  zarar(1) - 10000*zararb(1) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q2  =L=  
+
+max_zarar_q2..  zarar(2) - 10000*zararb(2) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q3  =L=  
+
+max_zarar_q3..  zarar(3) - 10000*zararb(3) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q4  =L=  
+
+max_zarar_q4..  zarar(4) - 10000*zararb(4) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q5  =L=  
+
+max_zarar_q5..  zarar(5) - 10000*zararb(5) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q6  =L=  
+
+max_zarar_q6..  zarar(6) - 10000*zararb(6) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q7  =L=  
+
+max_zarar_q7..  zarar(7) - 10000*zararb(7) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q8  =L=  
+
+max_zarar_q8..  zarar(8) - 10000*zararb(8) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q9  =L=  
+
+max_zarar_q9..  zarar(9) - 10000*zararb(9) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q10  =L=  
+
+max_zarar_q10..  zarar(10) - 10000*zararb(10) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q11  =L=  
+
+max_zarar_q11..  zarar(11) - 10000*zararb(11) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q12  =L=  
+
+max_zarar_q12..  zarar(12) - 10000*zararb(12) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q13  =L=  
+
+max_zarar_q13..  zarar(13) - 10000*zararb(13) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q14  =L=  
+
+max_zarar_q14..  zarar(14) - 10000*zararb(14) =L= 0 ; (LHS = 0)
+     
+
+---- max_zarar_q15  =L=  
+
+max_zarar_q15..  zarar(15) - 10000*zararb(15) =L= 0 ; (LHS = 0)
+     
+
+---- sodORzarar_q1  =E=  
+
+sodORzarar_q1..  sodb(1) + zararb(1) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q2  =E=  
+
+sodORzarar_q2..  sodb(2) + zararb(2) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q3  =E=  
+
+sodORzarar_q3..  sodb(3) + zararb(3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q4  =E=  
+
+sodORzarar_q4..  sodb(4) + zararb(4) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q5  =E=  
+
+sodORzarar_q5..  sodb(5) + zararb(5) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q6  =E=  
+
+sodORzarar_q6..  sodb(6) + zararb(6) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q7  =E=  
+
+sodORzarar_q7..  sodb(7) + zararb(7) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q8  =E=  
+
+sodORzarar_q8..  sodb(8) + zararb(8) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q9  =E=  
+
+sodORzarar_q9..  sodb(9) + zararb(9) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q10  =E=  
+
+sodORzarar_q10..  sodb(10) + zararb(10) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q11  =E=  
+
+sodORzarar_q11..  sodb(11) + zararb(11) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q12  =E=  
+
+sodORzarar_q12..  sodb(12) + zararb(12) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q13  =E=  
+
+sodORzarar_q13..  sodb(13) + zararb(13) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q14  =E=  
+
+sodORzarar_q14..  sodb(14) + zararb(14) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- sodORzarar_q15  =E=  
+
+sodORzarar_q15..  sodb(15) + zararb(15) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+GAMS 24.1.2  r40979 Released Jun 16, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/16/24 17:00:46 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE games Using MIP From line 822
+
+
+---- Z  tabe-hadaf
+
+Z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       Objective
+
+
+---- X  
+
+X(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -40       Objective
+        1       round2_q1_L
+        1       round2_q1_di_L
+        1       round2_q1_R
+        1       round2_q1_di_R
+        1       game_1
+        1       zarar_q1_L
+        1       sod_q1_L
+
+X(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -20       Objective
+        1       round2_q1_L
+        1       round2_q1_R
+        1       game_1
+        1       zarar_q1_L
+        1       sod_q1_L
+
+X(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -20       Objective
+        1       round2_q2_L
+        1       round2_q2_di_L
+        1       round2_q2_R
+        1       round2_q2_di_R
+        1       game_2
+        1       zarar_q2_L
+        1       sod_q2_L
+
+REMAINING 13 ENTRIES SKIPPED
+
+---- Y  
+
+Y(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       round2_q1_L
+        1       round3_q1_L
+       -1       round2_q1_di_L
+        1       round3_q1_di_L
+       -2       round2_q1_R
+        1       round3_q1_R
+       -1       round2_q1_di_R
+        1       round3_q1_di_R
+        1       zarar_q9_L
+        1       sod_q9_L
+
+Y(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       round2_q2_L
+        1       round3_q1_L
+       -1       round2_q2_di_L
+       -2       round2_q2_R
+        1       round3_q1_R
+       -1       round2_q2_di_R
+        1       zarar_q9_L
+        1       sod_q9_L
+
+Y(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       round2_q3_L
+        1       round3_q2_L
+       -1       round2_q3_di_L
+        1       round3_q2_di_L
+       -2       round2_q3_R
+        1       round3_q2_R
+       -1       round2_q3_di_R
+        1       round3_q2_di_R
+        1       zarar_q10_L
+        1       sod_q10_L
+
+REMAINING 5 ENTRIES SKIPPED
+
+---- S  
+
+S(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       round3_q1_L
+        1       final_q1_Le
+       -1       round3_q1_di_L
+        1       final_q1_di_Le
+       -2       round3_q1_R
+        1       final_q1_RI
+       -1       round3_q1_di_R
+        1       final_q1_di_RI
+        1       zarar_q13_L
+        1       sod_q13_L
+
+S(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       round3_q2_L
+        1       final_q1_Le
+       -1       round3_q2_di_L
+       -2       round3_q2_R
+        1       final_q1_RI
+       -1       round3_q2_di_R
+        1       zarar_q13_L
+        1       sod_q13_L
+
+S(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       round3_q3_L
+        1       final_q2_Le
+       -1       round3_q3_di_L
+        1       final_q2_di_Le
+       -2       round3_q3_R
+        1       final_q2_RI
+       -1       round3_q3_di_R
+        1       final_q2_di_RI
+        1       zarar_q14_L
+        1       sod_q14_L
+
+REMAINING ENTRY SKIPPED
+
+---- R  
+
+R(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       final_q1_Le
+        1       winner_Le
+       -1       final_q1_di_Le
+        1       winner_di_Le
+       -2       final_q1_RI
+        1       winner_RI
+       -1       final_q1_di_RI
+        1       winner_di_RI
+        1       zarar_q15_L
+        1       sod_q15_L
+
+R(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       final_q2_Le
+        1       winner_Le
+       -1       final_q2_di_Le
+       -2       final_q2_RI
+        1       winner_RI
+       -1       final_q2_di_RI
+        1       zarar_q15_L
+        1       sod_q15_L
+
+
+---- U  
+
+U(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       winner_Le
+       -1       winner_di_Le
+       -2       winner_RI
+       -1       winner_di_RI
+
+
+---- sod  
+
+sod(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -12       Objective
+        1       game_1
+        1       sod_q1_L
+        1       max_sod_q1
+
+sod(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -12       Objective
+        1       game_2
+        1       sod_q2_L
+        1       max_sod_q2
+
+sod(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -12       Objective
+        1       game_3
+        1       sod_q3_L
+        1       max_sod_q3
+
+REMAINING 12 ENTRIES SKIPPED
+
+---- zarar  
+
+zarar(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       24       Objective
+       -1       zarar_q1_L
+        1       max_zarar_q1
+
+zarar(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       24       Objective
+       -1       zarar_q2_L
+        1       max_zarar_q2
+
+zarar(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       24       Objective
+       -1       zarar_q3_L
+        1       max_zarar_q3
+
+REMAINING 12 ENTRIES SKIPPED
+
+---- zb  
+
+zb(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  round2_q1_L
+  1.0000000E+9  round2_q1_di_L
+  2.0000000E+9  round2_q1_R
+  -1.000000E+9  round2_q1_di_R
+        1       karshenas_L
+
+zb(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  round2_q2_L
+  1.0000000E+9  round2_q2_di_L
+  2.0000000E+9  round2_q2_R
+  -1.000000E+9  round2_q2_di_R
+        1       karshenas_L
+
+zb(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  round2_q3_L
+  1.0000000E+9  round2_q3_di_L
+  2.0000000E+9  round2_q3_R
+  -1.000000E+9  round2_q3_di_R
+        1       karshenas_L
+
+REMAINING 5 ENTRIES SKIPPED
+
+---- tb  
+
+tb(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  round3_q1_L
+  1.0000000E+9  round3_q1_di_L
+  2.0000000E+9  round3_q1_R
+  -1.000000E+9  round3_q1_di_R
+        1       karshenas_L
+
+tb(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  round3_q2_L
+  1.0000000E+9  round3_q2_di_L
+  2.0000000E+9  round3_q2_R
+  -1.000000E+9  round3_q2_di_R
+        1       karshenas_L
+
+tb(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  round3_q3_L
+  1.0000000E+9  round3_q3_di_L
+  2.0000000E+9  round3_q3_R
+  -1.000000E+9  round3_q3_di_R
+        1       karshenas_L
+
+REMAINING ENTRY SKIPPED
+
+---- wb  
+
+wb(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  final_q1_Le
+  1.0000000E+9  final_q1_di_Le
+  2.0000000E+9  final_q1_RI
+  -1.000000E+9  final_q1_di_RI
+        1       karshenas_L
+
+wb(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  final_q2_Le
+  1.0000000E+9  final_q2_di_Le
+  2.0000000E+9  final_q2_RI
+  -1.000000E+9  final_q2_di_RI
+        1       karshenas_L
+
+
+---- vb  
+
+vb(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -2.000000E+9  winner_Le
+  1.0000000E+9  winner_di_Le
+  2.0000000E+9  winner_RI
+  -1.000000E+9  winner_di_RI
+        1       karshenas_L
+
+
+---- sodb  
+
+sodb(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+9  zarar_q1_L
+   -10000       max_sod_q1
+        1       sodORzarar_q1
+
+sodb(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+9  zarar_q2_L
+   -10000       max_sod_q2
+        1       sodORzarar_q2
+
+sodb(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+9  zarar_q3_L
+   -10000       max_sod_q3
+        1       sodORzarar_q3
+
+REMAINING 12 ENTRIES SKIPPED
+
+---- zararb  
+
+zararb(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+9  sod_q1_L
+   -10000       max_zarar_q1
+        1       sodORzarar_q1
+
+zararb(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+9  sod_q2_L
+   -10000       max_zarar_q2
+        1       sodORzarar_q2
+
+zararb(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+  -1.000000E+9  sod_q3_L
+   -10000       max_zarar_q3
+        1       sodORzarar_q3
+
+REMAINING 12 ENTRIES SKIPPED
+GAMS 24.1.2  r40979 Released Jun 16, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/16/24 17:00:46 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE games Using MIP From line 822
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS         145     SINGLE EQUATIONS          145
+BLOCKS OF VARIABLES          14     SINGLE VARIABLES          107
+NON ZERO ELEMENTS           506     DISCRETE VARIABLES         45
+
+
+GENERATION TIME      =        0.015 SECONDS      4 MB  24.1.2 r40979 WEX-WEI
+
+
+EXECUTION TIME       =        0.015 SECONDS      4 MB  24.1.2 r40979 WEX-WEI
+GAMS 24.1.2  r40979 Released Jun 16, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/16/24 17:00:46 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE games Using MIP From line 822
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   games               OBJECTIVE  Z
+     TYPE    MIP                 DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  822
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      8 Integer Solution          
+**** OBJECTIVE VALUE          4840000.0000
+
+ RESOURCE USAGE, LIMIT          0.015      1000.000
+ ITERATION COUNT, LIMIT       145    2000000000
+
+IBM ILOG CPLEX   24.1.2 r40979 Released Jun 16, 2013 WEI x86_64/MS Windows    
+Cplex 12.5.1.0
+
+Reading parameter(s) from "c:\Users\Mahdi\Desktop\OR-project\h\gams\cplex.opt"
+>>  objrng all
+>>  rhsrng all
+Finished reading from "c:\Users\Mahdi\Desktop\OR-project\h\gams\cplex.opt"
+MIP status(102): integer optimal, tolerance
+Cplex Time: 0.01sec (det. 4.99 ticks)
+Fixing integer variables, and solving final LP...
+Fixed MIP status(1): optimal
+Cplex Time: 0.00sec (det. 0.16 ticks)
+Solution satisfies tolerances.
+
+MIP Solution:      4840000.000004    (145 iterations, 0 nodes)
+Final Solve:       4840000.000000    (0 iterations)
+
+Best possible:     5243535.714292
+Absolute gap:       403535.714287
+Relative gap:            0.083375
+
+  
+ 
+EQUATION NAME                                                                                                                                                                                                          LOWER          CURRENT            UPPER
+-------------                                                                                                                                                                                                          -----          -------            -----
+Objective                                                                                                                                                                                                               -INF                0             +INF
+round2_q1_L                                                                                                                                                                                                                0                0            10000
+round2_q2_L                                                                                                                                                                                                    -1.99999e+009                0             +INF
+round2_q3_L                                                                                                                                                                                                                0                0            10000
+round2_q4_L                                                                                                                                                                                                                0                0            10000
+round2_q5_L                                                                                                                                                                                                    -1.99999e+009                0             +INF
+round2_q6_L                                                                                                                                                                                                                0                0            10000
+round2_q7_L                                                                                                                                                                                                                0                0            10000
+round2_q8_L                                                                                                                                                                                                                0                0            10000
+round3_q1_L                                                                                                                                                                                                                0                0             5000
+round3_q2_L                                                                                                                                                                                                                0                0            10000
+round3_q3_L                                                                                                                                                                                                                0                0             5000
+round3_q4_L                                                                                                                                                                                                                0                0            10000
+final_q1_Le                                                                                                                                                                                                                0                0             7500
+final_q2_Le                                                                                                                                                                                                                0                0             7500
+winner_Le                                                                                                                                                                                                                  0                0             7500
+round2_q1_di_L                                                                                                                                                                                                          5000           1e+009             +INF
+round2_q2_di_L                                                                                                                                                                                                        1e+009           1e+009             +INF
+round2_q3_di_L                                                                                                                                                                                                          5000           1e+009             +INF
+round2_q4_di_L                                                                                                                                                                                                          5000           1e+009             +INF
+round2_q5_di_L                                                                                                                                                                                                        1e+009           1e+009     1.00001e+009
+round2_q6_di_L                                                                                                                                                                                                          5000           1e+009             +INF
+round2_q7_di_L                                                                                                                                                                                                          5000           1e+009             +INF
+round2_q8_di_L                                                                                                                                                                                                          5000           1e+009             +INF
+round3_q1_di_L                                                                                                                                                                                                          2500           1e+009             +INF
+round3_q2_di_L                                                                                                                                                                                                             0           1e+009             +INF
+round3_q3_di_L                                                                                                                                                                                                         -2500           1e+009             +INF
+round3_q4_di_L                                                                                                                                                                                                             0           1e+009             +INF
+final_q1_di_Le                                                                                                                                                                                                         -1250           1e+009             +INF
+final_q2_di_Le                                                                                                                                                                                                         -1250           1e+009             +INF
+winner_di_Le                                                                                                                                                                                                               0           1e+009             +INF
+round2_q1_R                                                                                                                                                                                                             -INF                0                0
+round2_q2_R                                                                                                                                                                                                             -INF                0     2.00001e+009
+round2_q3_R                                                                                                                                                                                                             -INF                0                0
+round2_q4_R                                                                                                                                                                                                             -INF                0                0
+round2_q5_R                                                                                                                                                                                                             -INF                0     2.00001e+009
+round2_q6_R                                                                                                                                                                                                             -INF                0                0
+round2_q7_R                                                                                                                                                                                                             -INF                0                0
+round2_q8_R                                                                                                                                                                                                             -INF                0                0
+round3_q1_R                                                                                                                                                                                                             -INF                0                0
+round3_q2_R                                                                                                                                                                                                             -INF                0                0
+round3_q3_R                                                                                                                                                                                                             -INF                0                0
+round3_q4_R                                                                                                                                                                                                             -INF                0                0
+final_q1_RI                                                                                                                                                                                                             -INF                0                0
+final_q2_RI                                                                                                                                                                                                             -INF                0                0
+winner_RI                                                                                                                                                                                                               -INF                0                0
+round2_q1_di_R                                                                                                                                                                                                          -INF          -1e+009             5000
+round2_q2_di_R                                                                                                                                                                                                       -1e+009          -1e+009          -1e+009
+round2_q3_di_R                                                                                                                                                                                                          -INF          -1e+009             5000
+round2_q4_di_R                                                                                                                                                                                                          -INF          -1e+009             5000
+round2_q5_di_R                                                                                                                                                                                                          -INF          -1e+009          -1e+009
+round2_q6_di_R                                                                                                                                                                                                          -INF          -1e+009             5000
+round2_q7_di_R                                                                                                                                                                                                          -INF          -1e+009             5000
+round2_q8_di_R                                                                                                                                                                                                          -INF          -1e+009             5000
+round3_q1_di_R                                                                                                                                                                                                          -INF          -1e+009             2500
+round3_q2_di_R                                                                                                                                                                                                          -INF          -1e+009                0
+round3_q3_di_R                                                                                                                                                                                                          -INF          -1e+009            -2500
+round3_q4_di_R                                                                                                                                                                                                          -INF          -1e+009                0
+final_q1_di_RI                                                                                                                                                                                                          -INF          -1e+009            -1250
+final_q2_di_RI                                                                                                                                                                                                          -INF          -1e+009            -1250
+winner_di_RI                                                                                                                                                                                                            -INF          -1e+009                0
+karshenas_L                                                                                                                                                                                                                2                3             +INF
+game_1                                                                                                                                                                                                                     0            10000            10000
+game_2                                                                                                                                                                                                                     0            10000            10000
+game_3                                                                                                                                                                                                                     0            10000            10000
+game_4                                                                                                                                                                                                                 10000            10000             +INF
+game_5                                                                                                                                                                                                                     0            10000            10000
+game_6                                                                                                                                                                                                                     0            10000            10000
+game_7                                                                                                                                                                                                                     0            10000            10000
+game_8                                                                                                                                                                                                                     0            10000            10000
+zarar_q1_L                                                                                                                                                                                                      -9.9999e+008            10000             +INF
+zarar_q2_L                                                                                                                                                                                                      -9.9999e+008            10000             +INF
+zarar_q3_L                                                                                                                                                                                                      -9.9999e+008            10000             +INF
+zarar_q4_L                                                                                                                                                                                                      -9.9999e+008            10000             +INF
+zarar_q5_L                                                                                                                                                                                                      -9.9999e+008            10000             +INF
+zarar_q6_L                                                                                                                                                                                                      -9.9999e+008            10000             +INF
+zarar_q7_L                                                                                                                                                                                                      -9.9999e+008            10000             +INF
+zarar_q8_L                                                                                                                                                                                                      -9.9999e+008            10000             +INF
+zarar_q9_L                                                                                                                                                                                                     -9.99995e+008            10000             +INF
+zarar_q10_L                                                                                                                                                                                                     -9.9999e+008            10000             +INF
+zarar_q11_L                                                                                                                                                                                                    -9.99995e+008            10000             +INF
+zarar_q12_L                                                                                                                                                                                                     -9.9999e+008            10000             +INF
+zarar_q13_L                                                                                                                                                                                                    -9.99992e+008            10000             +INF
+zarar_q14_L                                                                                                                                                                                                    -9.99992e+008            10000             +INF
+zarar_q15_L                                                                                                                                                                                                    -9.99992e+008            10000             +INF
+sod_q1_L                                                                                                                                                                                                               10000            10000             +INF
+sod_q2_L                                                                                                                                                                                                               10000            10000             +INF
+sod_q3_L                                                                                                                                                                                                               10000            10000             +INF
+sod_q4_L                                                                                                                                                                                                                   0            10000            10000
+sod_q5_L                                                                                                                                                                                                               10000            10000             +INF
+sod_q6_L                                                                                                                                                                                                               10000            10000             +INF
+sod_q7_L                                                                                                                                                                                                               10000            10000             +INF
+sod_q8_L                                                                                                                                                                                                               10000            10000             +INF
+sod_q9_L                                                                                                                                                                                                                5000            10000            15000
+sod_q10_L                                                                                                                                                                                                              10000            10000            20000
+sod_q11_L                                                                                                                                                                                                               5000            10000            15000
+sod_q12_L                                                                                                                                                                                                              10000            10000            20000
+sod_q13_L                                                                                                                                                                                                               7500            10000            17500
+sod_q14_L                                                                                                                                                                                                               7500            10000            17500
+sod_q15_L                                                                                                                                                                                                               7500            10000            17500
+max_sod_q1                                                                                                                                                                                                            -10000                0             +INF
+max_sod_q2                                                                                                                                                                                                            -10000                0             +INF
+max_sod_q3                                                                                                                                                                                                            -10000                0             +INF
+max_sod_q4                                                                                                                                                                                                            -10000                0             +INF
+max_sod_q5                                                                                                                                                                                                            -10000                0             +INF
+max_sod_q6                                                                                                                                                                                                            -10000                0             +INF
+max_sod_q7                                                                                                                                                                                                            -10000                0             +INF
+max_sod_q8                                                                                                                                                                                                            -10000                0             +INF
+max_sod_q9                                                                                                                                                                                                             -5000                0             +INF
+max_sod_q10                                                                                                                                                                                                           -10000                0             +INF
+max_sod_q11                                                                                                                                                                                                            -5000                0             +INF
+max_sod_q12                                                                                                                                                                                                           -10000                0             +INF
+max_sod_q13                                                                                                                                                                                                            -7500                0             +INF
+max_sod_q14                                                                                                                                                                                                            -7500                0             +INF
+max_sod_q15                                                                                                                                                                                                            -7500                0             +INF
+max_zarar_q1                                                                                                                                                                                                               0                0             +INF
+max_zarar_q2                                                                                                                                                                                                               0                0             +INF
+max_zarar_q3                                                                                                                                                                                                               0                0             +INF
+max_zarar_q4                                                                                                                                                                                                               0                0             +INF
+max_zarar_q5                                                                                                                                                                                                               0                0             +INF
+max_zarar_q6                                                                                                                                                                                                               0                0             +INF
+max_zarar_q7                                                                                                                                                                                                               0                0             +INF
+max_zarar_q8                                                                                                                                                                                                               0                0             +INF
+max_zarar_q9                                                                                                                                                                                                               0                0             +INF
+max_zarar_q10                                                                                                                                                                                                              0                0             +INF
+max_zarar_q11                                                                                                                                                                                                              0                0             +INF
+max_zarar_q12                                                                                                                                                                                                              0                0             +INF
+max_zarar_q13                                                                                                                                                                                                              0                0             +INF
+max_zarar_q14                                                                                                                                                                                                              0                0             +INF
+max_zarar_q15                                                                                                                                                                                                              0                0             +INF
+sodORzarar_q1                                                                                                                                                                                                              1                1                1
+sodORzarar_q2                                                                                                                                                                                                              1                1                1
+sodORzarar_q3                                                                                                                                                                                                              1                1                1
+sodORzarar_q4                                                                                                                                                                                                              1                1                1
+sodORzarar_q5                                                                                                                                                                                                              1                1                1
+sodORzarar_q6                                                                                                                                                                                                              1                1                1
+sodORzarar_q7                                                                                                                                                                                                              1                1                1
+sodORzarar_q8                                                                                                                                                                                                              1                1                1
+sodORzarar_q9                                                                                                                                                                                                              1                1                1
+sodORzarar_q10                                                                                                                                                                                                             1                1                1
+sodORzarar_q11                                                                                                                                                                                                             1                1                1
+sodORzarar_q12                                                                                                                                                                                                             1                1                1
+sodORzarar_q13                                                                                                                                                                                                             1                1                1
+sodORzarar_q14                                                                                                                                                                                                             1                1                1
+sodORzarar_q15                                                                                                                                                                                                             1                1                1
+  
+ 
+VARIABLE NAME                                                                                                                                                                                                          LOWER          CURRENT            UPPER
+-------------                                                                                                                                                                                                          -----          -------            -----
+Z                                                                                                                                                                                                                       -INF                1             +INF
+X(1)                                                                                                                                                                                                                      39               40             +INF
+X(2)                                                                                                                                                                                                                    -INF               20               40
+X(3)                                                                                                                                                                                                                    -INF               20               40
+X(4)                                                                                                                                                                                                                      20               40             +INF
+X(5)                                                                                                                                                                                                                      39               50             +INF
+X(6)                                                                                                                                                                                                                    -INF               30               50
+X(7)                                                                                                                                                                                                                      39               40             +INF
+X(8)                                                                                                                                                                                                                    -INF               30               40
+X(9)                                                                                                                                                                                                                      50               60              104
+X(10)                                                                                                                                                                                                                     12               50               60
+X(11)                                                                                                                                                                                                                     39               80             +INF
+X(12)                                                                                                                                                                                                                   -INF               20               80
+X(13)                                                                                                                                                                                                                     39               70             +INF
+X(14)                                                                                                                                                                                                                   -INF               20               70
+X(15)                                                                                                                                                                                                                     39               60             +INF
+X(16)                                                                                                                                                                                                                   -INF               20               60
+Y(1)                                                                                                                                                                                                                      -2               -0               54
+Y(2)                                                                                                                                                                                                                    -INF               -0               74
+Y(3)                                                                                                                                                                                                                     -22               -0               54
+Y(4)                                                                                                                                                                                                                      -2               -0               54
+Y(5)                                                                                                                                                                                                                    -INF               -0               44
+Y(6)                                                                                                                                                                                                                     -82               -0               54
+Y(7)                                                                                                                                                                                                                     -62               -0               54
+Y(8)                                                                                                                                                                                                                     -42               -0               54
+S(1)                                                                                                                                                                                                                      -4               -0               60
+S(2)                                                                                                                                                                                                                      -4               -0               60
+S(3)                                                                                                                                                                                                                    -164               -0               60
+S(4)                                                                                                                                                                                                                     -84               -0               60
+R(1)                                                                                                                                                                                                                      -8               -0               48
+R(2)                                                                                                                                                                                                                    -168               -0               48
+U(1)                                                                                                                                                                                                                    -208               -0                0
+sod(1)                                                                                                                                                                                                                  -INF               12               13
+sod(2)                                                                                                                                                                                                                  -INF               12               40
+sod(3)                                                                                                                                                                                                                  -INF               12               23
+sod(4)                                                                                                                                                                                                                  -INF               12               13
+sod(5)                                                                                                                                                                                                                  -INF               12               50
+sod(6)                                                                                                                                                                                                                  -INF               12               53
+sod(7)                                                                                                                                                                                                                  -INF               12               43
+sod(8)                                                                                                                                                                                                                  -INF               12               33
+sod(9)                                                                                                                                                                                                                     0               24               26
+sod(10)                                                                                                                                                                                                                    0               24               26
+sod(11)                                                                                                                                                                                                                    0               24              106
+sod(12)                                                                                                                                                                                                                    0               24               66
+sod(13)                                                                                                                                                                                                                    0               36               40
+sod(14)                                                                                                                                                                                                                    0               36              120
+sod(15)                                                                                                                                                                                                                    0               48               56
+zarar(1)                                                                                                                                                                                                                -INF              -24                0
+zarar(2)                                                                                                                                                                                                                -INF              -24                0
+zarar(3)                                                                                                                                                                                                                -INF              -24                0
+zarar(4)                                                                                                                                                                                                                -INF              -24                0
+zarar(5)                                                                                                                                                                                                                -INF              -24                0
+zarar(6)                                                                                                                                                                                                                -INF              -24                0
+zarar(7)                                                                                                                                                                                                                -INF              -24                0
+zarar(8)                                                                                                                                                                                                                -INF              -24                0
+zarar(9)                                                                                                                                                                                                                -INF              -48                0
+zarar(10)                                                                                                                                                                                                               -INF              -48                0
+zarar(11)                                                                                                                                                                                                               -INF              -48                0
+zarar(12)                                                                                                                                                                                                               -INF              -48                0
+zarar(13)                                                                                                                                                                                                               -INF              -72                0
+zarar(14)                                                                                                                                                                                                               -INF              -72                0
+zarar(15)                                                                                                                                                                                                               -INF              -96                0
+zb(1)                                                                                                                                                                                                                   -INF               -0             +INF
+zb(2)                                                                                                                                                                                                                   -INF               -0             +INF
+zb(3)                                                                                                                                                                                                                   -INF               -0             +INF
+zb(4)                                                                                                                                                                                                                   -INF               -0             +INF
+zb(5)                                                                                                                                                                                                                   -INF               -0             +INF
+zb(6)                                                                                                                                                                                                                   -INF               -0             +INF
+zb(7)                                                                                                                                                                                                                   -INF               -0             +INF
+zb(8)                                                                                                                                                                                                                   -INF               -0             +INF
+tb(1)                                                                                                                                                                                                                   -INF               -0             +INF
+tb(2)                                                                                                                                                                                                                   -INF               -0             +INF
+tb(3)                                                                                                                                                                                                                   -INF               -0             +INF
+tb(4)                                                                                                                                                                                                                   -INF               -0             +INF
+wb(1)                                                                                                                                                                                                                   -INF               -0             +INF
+wb(2)                                                                                                                                                                                                                   -INF               -0             +INF
+vb(1)                                                                                                                                                                                                                   -INF               -0             +INF
+sodb(1)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(2)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(3)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(4)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(5)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(6)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(7)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(8)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(9)                                                                                                                                                                                                                 -INF               -0             +INF
+sodb(10)                                                                                                                                                                                                                -INF               -0             +INF
+sodb(11)                                                                                                                                                                                                                -INF               -0             +INF
+sodb(12)                                                                                                                                                                                                                -INF               -0             +INF
+sodb(13)                                                                                                                                                                                                                -INF               -0             +INF
+sodb(14)                                                                                                                                                                                                                -INF               -0             +INF
+sodb(15)                                                                                                                                                                                                                -INF               -0             +INF
+zararb(1)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(2)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(3)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(4)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(5)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(6)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(7)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(8)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(9)                                                                                                                                                                                                               -INF               -0             +INF
+zararb(10)                                                                                                                                                                                                              -INF               -0             +INF
+zararb(11)                                                                                                                                                                                                              -INF               -0             +INF
+zararb(12)                                                                                                                                                                                                              -INF               -0             +INF
+zararb(13)                                                                                                                                                                                                              -INF               -0             +INF
+zararb(14)                                                                                                                                                                                                              -INF               -0             +INF
+zararb(15)                                                                                                                                                                                                              -INF               -0             +INF
+ 
+ 
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU Objective           .              .              .             1.0000      
+---- EQU round2_q1~        -INF             .              .            27.0000      
+---- EQU round2_q2~        -INF      -1.999990E+9          .              .          
+---- EQU round2_q3~        -INF             .              .            27.0000      
+---- EQU round2_q4~        -INF             .              .            27.0000      
+---- EQU round2_q5~        -INF      -1.999990E+9          .              .          
+---- EQU round2_q6~        -INF             .              .            27.0000      
+---- EQU round2_q7~        -INF             .              .            27.0000      
+---- EQU round2_q8~        -INF             .              .            27.0000      
+---- EQU round3_q1~        -INF             .              .            30.0000      
+---- EQU round3_q2~        -INF             .              .            30.0000      
+---- EQU round3_q3~        -INF             .              .            30.0000      
+---- EQU round3_q4~        -INF             .              .            30.0000      
+---- EQU final_q1_~        -INF             .              .            24.0000      
+---- EQU final_q2_~        -INF             .              .            24.0000      
+---- EQU winner_Le         -INF             .              .             EPS         
+---- EQU round2_q1~        -INF         5000.0000   1.0000000E+9          .          
+---- EQU round2_q2~        -INF      1.0000000E+9   1.0000000E+9          .          
+---- EQU round2_q3~        -INF         5000.0000   1.0000000E+9          .          
+---- EQU round2_q4~        -INF         5000.0000   1.0000000E+9          .          
+---- EQU round2_q5~        -INF      1.0000000E+9   1.0000000E+9        10.0000      
+---- EQU round2_q6~        -INF         5000.0000   1.0000000E+9          .          
+---- EQU round2_q7~        -INF         5000.0000   1.0000000E+9          .          
+---- EQU round2_q8~        -INF         5000.0000   1.0000000E+9          .          
+---- EQU round3_q1~        -INF         2500.0000   1.0000000E+9          .          
+---- EQU round3_q2~        -INF             .       1.0000000E+9          .          
+---- EQU round3_q3~        -INF        -2500.0000   1.0000000E+9          .          
+---- EQU round3_q4~        -INF             .       1.0000000E+9          .          
+---- EQU final_q1_~        -INF        -1250.0000   1.0000000E+9          .          
+---- EQU final_q2_~        -INF        -1250.0000   1.0000000E+9          .          
+---- EQU winner_di~        -INF             .       1.0000000E+9          .          
+---- EQU round2_q1~          .              .            +INF             .          
+---- EQU round2_q2~          .       2.0000100E+9        +INF             .          
+---- EQU round2_q3~          .              .            +INF             .          
+---- EQU round2_q4~          .              .            +INF             .          
+---- EQU round2_q5~          .       2.0000100E+9        +INF             .          
+---- EQU round2_q6~          .              .            +INF             .          
+---- EQU round2_q7~          .              .            +INF             .          
+---- EQU round2_q8~          .              .            +INF             .          
+---- EQU round3_q1~          .              .            +INF             .          
+---- EQU round3_q2~          .              .            +INF             .          
+---- EQU round3_q3~          .              .            +INF             .          
+---- EQU round3_q4~          .              .            +INF             .          
+---- EQU final_q1_~          .              .            +INF             .          
+---- EQU final_q2_~          .              .            +INF             .          
+---- EQU winner_RI           .              .            +INF             .          
+---- EQU round2_q1~   -1.000000E+9      5000.0000        +INF             .          
+---- EQU round2_q2~   -1.000000E+9   -1.000000E+9        +INF          -20.0000      
+---- EQU round2_q3~   -1.000000E+9      5000.0000        +INF             .          
+---- EQU round2_q4~   -1.000000E+9      5000.0000        +INF             .          
+---- EQU round2_q5~   -1.000000E+9   -1.000000E+9        +INF             .          
+---- EQU round2_q6~   -1.000000E+9      5000.0000        +INF             .          
+---- EQU round2_q7~   -1.000000E+9      5000.0000        +INF             .          
+---- EQU round2_q8~   -1.000000E+9      5000.0000        +INF             .          
+---- EQU round3_q1~   -1.000000E+9      2500.0000        +INF             .          
+---- EQU round3_q2~   -1.000000E+9          .            +INF             .          
+---- EQU round3_q3~   -1.000000E+9     -2500.0000        +INF             .          
+---- EQU round3_q4~   -1.000000E+9          .            +INF             .          
+---- EQU final_q1_~   -1.000000E+9     -1250.0000        +INF             .          
+---- EQU final_q2_~   -1.000000E+9     -1250.0000        +INF             .          
+---- EQU winner_di~   -1.000000E+9          .            +INF             .          
+---- EQU karshenas~        -INF            2.0000         3.0000          .          
+---- EQU game_1            -INF        10000.0000     10000.0000        13.0000      
+---- EQU game_2            -INF        10000.0000     10000.0000        40.0000      
+---- EQU game_3            -INF        10000.0000     10000.0000        23.0000      
+---- EQU game_4            -INF        10000.0000     10000.0000          .          
+---- EQU game_5            -INF        10000.0000     10000.0000        50.0000      
+---- EQU game_6            -INF        10000.0000     10000.0000        53.0000      
+---- EQU game_7            -INF        10000.0000     10000.0000        43.0000      
+---- EQU game_8            -INF        10000.0000     10000.0000        33.0000      
+---- EQU zarar_q1_L        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q2_L        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q3_L        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q4_L        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q5_L        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q6_L        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q7_L        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q8_L        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q9_L        -INF      -0.999995E+9     10000.0000          .          
+---- EQU zarar_q10~        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q11~        -INF      -0.999995E+9     10000.0000          .          
+---- EQU zarar_q12~        -INF      -0.999990E+9     10000.0000          .          
+---- EQU zarar_q13~        -INF      -0.999992E+9     10000.0000          .          
+---- EQU zarar_q14~        -INF      -0.999992E+9     10000.0000          .          
+---- EQU zarar_q15~        -INF      -0.999992E+9     10000.0000          .          
+---- EQU sod_q1_L          -INF        10000.0000     10000.0000          .          
+---- EQU sod_q2_L          -INF        10000.0000     10000.0000          .          
+---- EQU sod_q3_L          -INF        10000.0000     10000.0000          .          
+---- EQU sod_q4_L          -INF        10000.0000     10000.0000        13.0000      
+---- EQU sod_q5_L          -INF        10000.0000     10000.0000          .          
+---- EQU sod_q6_L          -INF        10000.0000     10000.0000          .          
+---- EQU sod_q7_L          -INF        10000.0000     10000.0000          .          
+---- EQU sod_q8_L          -INF        10000.0000     10000.0000          .          
+---- EQU sod_q9_L          -INF        10000.0000     10000.0000        24.0000      
+---- EQU sod_q10_L         -INF        10000.0000     10000.0000        24.0000      
+---- EQU sod_q11_L         -INF        10000.0000     10000.0000        24.0000      
+---- EQU sod_q12_L         -INF        10000.0000     10000.0000        24.0000      
+---- EQU sod_q13_L         -INF        10000.0000     10000.0000        36.0000      
+---- EQU sod_q14_L         -INF        10000.0000     10000.0000        36.0000      
+---- EQU sod_q15_L         -INF        10000.0000     10000.0000        48.0000      
+---- EQU max_sod_q1        -INF       -10000.0000          .              .          
+---- EQU max_sod_q2        -INF       -10000.0000          .              .          
+---- EQU max_sod_q3        -INF       -10000.0000          .              .          
+---- EQU max_sod_q4        -INF       -10000.0000          .              .          
+---- EQU max_sod_q5        -INF       -10000.0000          .              .          
+---- EQU max_sod_q6        -INF       -10000.0000          .              .          
+---- EQU max_sod_q7        -INF       -10000.0000          .              .          
+---- EQU max_sod_q8        -INF       -10000.0000          .              .          
+---- EQU max_sod_q9        -INF        -5000.0000          .              .          
+---- EQU max_sod_q~        -INF       -10000.0000          .              .          
+---- EQU max_sod_q~        -INF        -5000.0000          .              .          
+---- EQU max_sod_q~        -INF       -10000.0000          .              .          
+---- EQU max_sod_q~        -INF        -7500.0000          .              .          
+---- EQU max_sod_q~        -INF        -7500.0000          .              .          
+---- EQU max_sod_q~        -INF        -7500.0000          .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU max_zarar~        -INF             .              .              .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+---- EQU sodORzara~         1.0000         1.0000         1.0000          .          
+
+  Objective  Objective function of problem
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Z                 -INF      4840000.0000        +INF             .          
+
+  Z  tabe-hadaf
+
+---- VAR X  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1           .         10000.0000        +INF             .          
+2           .              .            +INF          -20.0000      
+3           .              .            +INF             .          
+4           .         10000.0000        +INF             .          
+5           .         10000.0000        +INF             .          
+6           .              .            +INF          -20.0000      
+7           .         10000.0000        +INF             .          
+8           .              .            +INF          -10.0000      
+9           .              .            +INF             .          
+10          .         10000.0000        +INF             .          
+11          .         10000.0000        +INF             .          
+12          .              .            +INF          -60.0000      
+13          .         10000.0000        +INF             .          
+14          .              .            +INF          -50.0000      
+15          .         10000.0000        +INF             .          
+16          .              .            +INF          -40.0000      
+
+---- VAR Y  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .          5000.0000        +INF             .          
+2          .              .            +INF          -74.0000      
+3          .          5000.0000        +INF             .          
+4          .          5000.0000        +INF             .          
+5          .              .            +INF          -44.0000      
+6          .          5000.0000        +INF             .          
+7          .          5000.0000        +INF             .          
+8          .          5000.0000        +INF             .          
+
+---- VAR S  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .          2500.0000        +INF             .          
+2          .          5000.0000        +INF             .          
+3          .          2500.0000        +INF             .          
+4          .          5000.0000        +INF             .          
+
+---- VAR R  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .          3750.0000        +INF             .          
+2          .          3750.0000        +INF             .          
+
+---- VAR U  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .          3750.0000        +INF             .          
+
+---- VAR sod  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1           .              .            +INF           -1.0000      
+2           .              .            +INF          -28.0000      
+3           .              .            +INF          -11.0000      
+4           .              .            +INF           -1.0000      
+5           .              .            +INF          -38.0000      
+6           .              .            +INF          -41.0000      
+7           .              .            +INF          -31.0000      
+8           .              .            +INF          -21.0000      
+9           .          5000.0000        +INF             .          
+10          .              .            +INF             .          
+11          .          5000.0000        +INF             .          
+12          .              .            +INF             .          
+13          .          2500.0000        +INF             .          
+14          .          2500.0000        +INF             .          
+15          .          2500.0000        +INF             .          
+
+---- VAR zarar  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1           .              .            +INF          -24.0000      
+2           .              .            +INF          -24.0000      
+3           .              .            +INF          -24.0000      
+4           .              .            +INF          -24.0000      
+5           .              .            +INF          -24.0000      
+6           .              .            +INF          -24.0000      
+7           .              .            +INF          -24.0000      
+8           .              .            +INF          -24.0000      
+9           .              .            +INF          -48.0000      
+10          .              .            +INF          -48.0000      
+11          .              .            +INF          -48.0000      
+12          .              .            +INF          -48.0000      
+13          .              .            +INF          -72.0000      
+14          .              .            +INF          -72.0000      
+15          .              .            +INF          -96.0000      
+
+---- VAR zb  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .              .             1.0000   5.400000E+10      
+2          .             1.0000         1.0000   -2.00000E+10      
+3          .              .             1.0000   5.400000E+10      
+4          .              .             1.0000   5.400000E+10      
+5          .             1.0000         1.0000   -1.00000E+10      
+6          .              .             1.0000   5.400000E+10      
+7          .              .             1.0000   5.400000E+10      
+8          .              .             1.0000   5.400000E+10      
+
+---- VAR tb  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .              .             1.0000   6.000000E+10      
+2          .              .             1.0000   6.000000E+10      
+3          .              .             1.0000   6.000000E+10      
+4          .              .             1.0000   6.000000E+10      
+
+---- VAR wb  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .              .             1.0000   4.800000E+10      
+2          .              .             1.0000   4.800000E+10      
+
+---- VAR vb  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .              .             1.0000         EPS         
+
+---- VAR sodb  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1           .             1.0000         1.0000         EPS         
+2           .             1.0000         1.0000         EPS         
+3           .             1.0000         1.0000         EPS         
+4           .             1.0000         1.0000         EPS         
+5           .             1.0000         1.0000         EPS         
+6           .             1.0000         1.0000         EPS         
+7           .             1.0000         1.0000         EPS         
+8           .             1.0000         1.0000         EPS         
+9           .             1.0000         1.0000         EPS         
+10          .             1.0000         1.0000         EPS         
+11          .             1.0000         1.0000         EPS         
+12          .             1.0000         1.0000         EPS         
+13          .             1.0000         1.0000         EPS         
+14          .             1.0000         1.0000         EPS         
+15          .             1.0000         1.0000         EPS         
+
+---- VAR zararb  
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+1           .              .             1.0000         EPS         
+2           .              .             1.0000         EPS         
+3           .              .             1.0000         EPS         
+4           .              .             1.0000   1.300000E+10      
+5           .              .             1.0000         EPS         
+6           .              .             1.0000         EPS         
+7           .              .             1.0000         EPS         
+8           .              .             1.0000         EPS         
+9           .              .             1.0000   2.400000E+10      
+10          .              .             1.0000   2.400000E+10      
+11          .              .             1.0000   2.400000E+10      
+12          .              .             1.0000   2.400000E+10      
+13          .              .             1.0000   3.600000E+10      
+14          .              .             1.0000   3.600000E+10      
+15          .              .             1.0000   4.800000E+10      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 24.1.2  r40979 Released Jun 16, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/16/24 17:00:46 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----    825 VARIABLE X.L  
+
+1  10000.000,    4  10000.000,    5  10000.000,    7  10000.000,    10 10000.000,    11 10000.000,    13 10000.000,    15 10000.000
+
+
+----    825 VARIABLE X.M  
+
+2  -20.000,    6  -20.000,    8  -10.000,    12 -60.000,    14 -50.000,    16 -40.000
+
+
+
+EXECUTION TIME       =        0.000 SECONDS      3 MB  24.1.2 r40979 WEX-WEI
+
+
+USER: Gary Goldstein                                 G010614:2121CA-WIN
+      Decision Ware, Inc.                                        DC2807
+
+
+**** FILE SUMMARY
+
+Input      c:\Users\Mahdi\Desktop\OR-project\h\gams\change-2-sensivity_analays.gms
+Output     c:\Users\Mahdi\Desktop\OR-project\h\gams\change-2-sensivity_analays.lst
